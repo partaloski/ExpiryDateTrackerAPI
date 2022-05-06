@@ -2,6 +2,8 @@ package com.example.expirydatetrackerapi.service.impl;
 
 import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.User;
+import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
+import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
 import com.example.expirydatetrackerapi.models.exceptions.PasswordsDoNotMatchException;
 import com.example.expirydatetrackerapi.models.exceptions.UserWithEmailAlreadyExists;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
@@ -44,7 +46,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<Product> getWishlistForUser(String username) {
+    public List<UserProductsWishlistDTO> getWishlistForUser(String username) {
         User user = usersRepository.findById(username).orElse(null);
         if(user == null){
             return null;
@@ -54,17 +56,17 @@ public class UsersServiceImpl implements UsersService {
                 return new ArrayList<>();
             else{
                 Collection<UserProductsWishlist> wishlist = user.getProductsWishlist();
-                List<Product> products = new LinkedList<>();
-                for(UserProductsWishlist p: wishlist){
-                    products.add(p.getProduct());
+                List<UserProductsWishlistDTO> wishlistDTOS = new ArrayList<>();
+                for(UserProductsWishlist wl: wishlist){
+                    wishlistDTOS.add(UserProductsWishlistDTO.createExpiryOf(wl));
                 }
-                return products;
+                return wishlistDTOS;
             }
         }
     }
 
     @Override
-    public List<UserProductsExpiry> getExpiryListForUser(String username) {
+    public List<UserProductsExpiryDTO> getExpiryListForUser(String username) {
         User user = usersRepository.findById(username).orElse(null);
         if(user == null){
             return null;
@@ -74,11 +76,11 @@ public class UsersServiceImpl implements UsersService {
                 return new ArrayList<>();
             else{
                 Collection<UserProductsExpiry> expiries = user.getProductsExpiries();
-                List<UserProductsExpiry> ex = new LinkedList<>();
+                List<UserProductsExpiryDTO> expiryDTOS = new ArrayList<>();
                 for(UserProductsExpiry e: expiries){
-                    ex.add(e);
+                    expiryDTOS.add(UserProductsExpiryDTO.createExpiryOf(e));
                 }
-                return ex;
+                return expiryDTOS;
             }
         }
     }

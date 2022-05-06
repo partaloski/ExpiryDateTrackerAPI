@@ -2,6 +2,8 @@ package com.example.expirydatetrackerapi.web.controller.rest;
 
 import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.User;
+import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
+import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
 import com.example.expirydatetrackerapi.models.exceptions.PasswordsDoNotMatchException;
 import com.example.expirydatetrackerapi.models.exceptions.UserWithEmailAlreadyExists;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
@@ -52,20 +54,20 @@ public class UsersRestController {
     }
 
     @GetMapping("/{username}/wishlist")
-    private ResponseEntity<List<Product>> wishlistProductsForUser(@PathVariable String username){
-        List<Product> products = usersService.getWishlistForUser(username);
+    private ResponseEntity<List<UserProductsWishlistDTO>> wishlistProductsForUser(@PathVariable String username){
+        List<UserProductsWishlistDTO> wishlist = usersService.getWishlistForUser(username);
 
-        if(products==null){
+        if(wishlist==null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         else{
-            return new ResponseEntity<>(products, HttpStatus.OK);
+            return new ResponseEntity<>(wishlist, HttpStatus.OK);
         }
     }
 
     @GetMapping("/{username}/expiryList")
-    private ResponseEntity<List<UserProductsExpiry>> expiryListForUser(@PathVariable String username){
-        List<UserProductsExpiry> expiries = usersService.getExpiryListForUser(username);
+    private ResponseEntity<List<UserProductsExpiryDTO>> expiryListForUser(@PathVariable String username){
+        List<UserProductsExpiryDTO> expiries = usersService.getExpiryListForUser(username);
         if(expiries==null){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

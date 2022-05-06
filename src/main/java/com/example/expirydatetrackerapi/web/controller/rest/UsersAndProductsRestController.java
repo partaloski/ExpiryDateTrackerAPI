@@ -49,8 +49,8 @@ public class UsersAndProductsRestController {
         return ResponseEntity.ok().body("The Expiry item was removed.");
     }
 
-    @DeleteMapping("/clear/e")
-    public ResponseEntity<String> clearExpiries (@RequestParam String username){
+    @DeleteMapping("{username}/clear/e")
+    public ResponseEntity<String> clearExpiries (@PathVariable String username){
         try{
             serviceExpiry.clearExpiryList(username);
         }
@@ -83,8 +83,8 @@ public class UsersAndProductsRestController {
         return ResponseEntity.ok().body("The wishlist item was removed.");
     }
 
-    @DeleteMapping("/clear/w")
-    public ResponseEntity<String> clearWishlist (@RequestParam String username){
+    @DeleteMapping("{username}/clear/w")
+    public ResponseEntity<String> clearWishlist (@PathVariable String username){
         try{
             serviceWishlist.clearWishlist(username);
         }
@@ -93,42 +93,5 @@ public class UsersAndProductsRestController {
         }
         String response = "The wishlist has been cleaned";
         return ResponseEntity.ok().body(response);
-    }
-
-    @GetMapping("/e/{username}")
-    public ResponseEntity<List<UserProductsExpiry>> getExpiryListForUser(@PathVariable String username){
-        try{
-            List<UserProductsExpiry> listStart = serviceExpiry.getExpiryListForUser(username);
-            List<UserProductsExpiry> list = new LinkedList<>();
-            for(UserProductsExpiry ex: listStart){
-                User user = ex.getUser();
-                user.clearQuery();
-                ex.setUser(user);
-                list.add(ex);
-            }
-            return ResponseEntity.ok().body(list);
-        }
-        catch (RuntimeException ex){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-
-    @GetMapping("/w/{username}")
-    public ResponseEntity<List<UserProductsWishlist>> getWishlistForUser(@PathVariable String username){
-        try{
-            List<UserProductsWishlist> listStart = serviceWishlist.getWishlistForUser(username);
-            List<UserProductsWishlist> list = new LinkedList<>();
-            for(UserProductsWishlist wi: listStart){
-                User user = wi.getUser();
-                user.clearQuery();
-                wi.setUser(user);
-                list.add(wi);
-            }
-            return ResponseEntity.ok().body(list);
-        }
-        catch (RuntimeException ex){
-            return ResponseEntity.notFound().build();
-        }
     }
 }
