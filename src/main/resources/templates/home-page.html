@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>EDT API</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
@@ -22,168 +22,277 @@
         .toggler:hover{
             background: darkblue !important;
         }
-
+        .bg-gray{
+            background-color: rgb(192,192,192);
+        }
+        .card-title-size{
+            font-size: 2.2rem;
+        }
+        .card-subtitle-size{
+            font-size: 1.2rem;
+            max-width: 100% !important;
+            height: fit-content !important;
+        }
+        .w-90{
+            width: 90% !important;
+        }
     </style>
 </head>
-<body>
-<div class="container mt-2 bg-custom p-5 text-white rounded-3">
-    <h1 class="display-4 text-center text-info bg-light p-2 rounded-2">Expiry Date Tracker API</h1>
-    <hr>
-    <a
-            data-bs-toggle="collapse"
-            href="#productdiv"
-            role="button"
-            aria-expanded="false"
-            aria-controls="productdiv"
-            class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
-        Products
-    </a>
-    <div class="container collapse multi-collapse rounded-1 p-4 bg-light m-2" id="productdiv">
-        <div class="row">
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-success rounded-1 d-block w-25 text-center mx-auto">GET</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/products/</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Retrieves a list of all products.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects no variables.</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">POST</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/products/add</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to add a product into the database.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> id (Integer), name (String), manufacturer_id (Integer).</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-danger rounded-1 d-block w-25 text-center mx-auto">DELETE</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/products/delete/{ID}</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Deletes the product which can be identified with the <strong>[ID]</strong> attribute.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Request Variable: <br/> id (Integer).</p>
-            </div>
-        </div>
-    </div>
-    <a
-            data-bs-toggle="collapse"
-            href="#manufacturerdiv"
-            role="button"
-            aria-expanded="false"
-            aria-controls="manufacturerdiv"
-            class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
-        Manufacturers
-    </a>
-    <div id="manufacturerdiv" class="container collapse multi-collapse rounded-1 p-4 bg-light m-2">
-        <div class="row">
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-success rounded-1 d-block w-25 text-center mx-auto">GET</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/manufacturers/</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Retrieves a list of all manufacturers.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects no variables.</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">POST</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/manufacturers/add</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to add a manufacturer into the database.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Request Variable: <br/> name (String).</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-danger rounded-1 d-block w-25 text-center mx-auto">DELETE</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/manufacturers/delete/{ID}</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Deletes the manufacturer which can be identified with the <strong>[ID]</strong> attribute.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:  <br/> id (Integer).</p>
+<body class="bg-dark">
+    <div class="container mt-4 bg-light p-5 text-white rounded-3">
+        <h1 class="display-4 text-center text-info bg-dark p-2 rounded-2">Expiry Date Tracker API</h1>
+        <hr>
+        <a
+                data-bs-toggle="collapse"
+                href="#productdiv"
+                role="button"
+                aria-expanded="false"
+                aria-controls="productdiv"
+                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+            Products
+        </a>
+        <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="productdiv">
+            <div class="row">
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/products/</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Retrieves a list of all products.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects no variables.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/products/add</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to add a product into the database.</p>
+                    </div>
+                    <div class="card-footer  h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> id (Integer), name (String), manufacturer_id (Integer).</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/products/delete/{ID}</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Deletes the product which can be identified with the <strong>[ID]</strong> attribute.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:<br/>id (Integer)</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+        <a
+                data-bs-toggle="collapse"
+                href="#manufacturerdiv"
+                role="button"
+                aria-expanded="false"
+                aria-controls="manufacturerdiv"
+                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+            Manufacturers
+        </a>
+        <div id="manufacturerdiv" class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2">
+            <div class="row">
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/manufacturers/</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Retrieves a list of all manufacturers.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects no variables.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/manufacturers/add</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to add a manufacturer into the database.</p>
+                    </div>
+                    <div class="card-footer  h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Request Variable: <br/>name (String).</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/manufacturers/delete/{ID}</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Deletes the manufacturer which can be identified with the <strong>[ID]</strong> attribute.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:<br/>id (Integer)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <a
-            data-bs-toggle="collapse"
-            href="#userdiv"
-            role="button"
-            aria-expanded="false"
-            aria-controls="userdiv"
-            class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
-        Users
-    </a>
-    <div class="container collapse multi-collapse rounded-1 p-4 bg-light m-2" id="userdiv">
-        <div class="row mb-2">
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">POST</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/users/login</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to log in as a certain user.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> username (String), password (String).</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">POST</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/users/register</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to register a new user into the database.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> username (String), password (String), confirmPassword (String), name (String), surname (String, not required), email (String).</p>
-            </div>
-        </div>
+        <a
+                data-bs-toggle="collapse"
+                href="#userdiv"
+                role="button"
+                aria-expanded="false"
+                aria-controls="userdiv"
+                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+            Users
+        </a>
+        <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="userdiv">
+            <div class="row mb-2">
+                <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/login</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to log in as a certain user.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> username (String), password (String).</p>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/register</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to register a new user into the database.</p>
+                    </div>
+                    <div class="card-footer h-30">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 6 Request Variables: <br/> username (String), password (String), confirmPassword (String), name (String), surname (String), email (String).</p>
+                    </div>
+                </div>
+                </div>
+            <div class="row mb-2">
 
-        <div class="row">
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">GET</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/users/{username}/wishlist</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to get all wishlist items for a certain user.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+                <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/{username}/wishlist</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to get all wishlist items for a certain user.</p>
+                    </div>
+                    <div class="card-footer h-30">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/{username}/expiryList</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to get all expiry items for a certain user.</p>
+                    </div>
+                    <div class="card-footer h-30">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">GET</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/users/{username}/expiryList</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to get all expiry items for a certain user.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+        </div>
+        <a
+                data-bs-toggle="collapse"
+                href="#pudiv"
+                role="button"
+                aria-expanded="false"
+                aria-controls="pudiv"
+                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+            Products-Users
+        </a>
+        <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="pudiv">
+            <div class="row mb-2">
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/add/e</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a product expires.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request variables:<br/>username(String), productId(Integer),<br/> expiryDate(LocalDate, "YYYY-MM-DD").</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/delete/e</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to delete a certain expiry from the database.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Request Variable: <br/> id (Integer).</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/<br/>{username}/clear/e</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's expiry list.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/add/w</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">UUsed to add a relation User-Product, which marks a date when a user wants to buy (wishlists) a product with a given quantity.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request variables:<br/>username(String), productId(Integer), quantity(Integer).</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/delete/w</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Used to delete a certain wishlist item from the database.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> username (String), productId (Integer).</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                    <div class="card-header">
+                        <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/<br/>{username}/clear/w</strong></h4>
+                        <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's wishlist.</p>
+                    </div>
+                    <div class="card-footer h-25">
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:  <br/> username (String).</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <a
-            data-bs-toggle="collapse"
-            href="#pudiv"
-            role="button"
-            aria-expanded="false"
-            aria-controls="pudiv"
-            class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
-        Products-Users
-    </a>
-    <div class="container collapse multi-collapse rounded-1 p-4 bg-light m-2" id="pudiv">
-        <div class="row mb-2">
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">POST</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/productsUsers/add/e</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a product expires.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request variables:<br/>username(String), productId(Integer),<br/> expiryDate(LocalDate, "YYYY-MM-DD").</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-danger rounded-1 d-block w-25 text-center mx-auto">DELETE</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/productsUsers/delete/e</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to delete a certain expiry from the database.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Request Variable: <br/> id (Integer).</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-danger rounded-1 d-block w-25 text-center mx-auto">DELETE</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/productsUsers/clear/e</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's expiry list.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:  <br/> username (String).</p>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-warning rounded-1 d-block w-25 text-center mx-auto">POST</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/productsUsers/add/w</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a user wants to buy (wishlists) a product with a given quantity.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request variables:<br/>username(String), productId(Integer), quantity(Integer).</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-danger rounded-1 d-block w-25 text-center mx-auto">DELETE</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/productsUsers/delete/w</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Used to delete a certain wishlist item from the database.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> username (String), productId (Integer).</p>
-            </div>
-            <div class="col-4 mx-auto">
-                <h4 class="p-1 bg-danger rounded-1 d-block w-25 text-center mx-auto">DELETE</h4>
-                <h4 class="p-1 bg-info rounded-2 modal-content text-center mx-auto"><strong>/api/productsUsers/clear/w</strong></h4>
-                <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's wishlist.</p>
-                <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:  <br/> username (String).</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 </body>
