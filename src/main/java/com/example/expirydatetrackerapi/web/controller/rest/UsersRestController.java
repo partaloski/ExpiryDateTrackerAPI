@@ -1,18 +1,15 @@
 package com.example.expirydatetrackerapi.web.controller.rest;
 
-import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.User;
+import com.example.expirydatetrackerapi.models.dto.UserAuthenticationDTO;
 import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
 import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
-import com.example.expirydatetrackerapi.models.exceptions.PasswordsDoNotMatchException;
-import com.example.expirydatetrackerapi.models.exceptions.UserWithEmailAlreadyExists;
-import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
+import com.example.expirydatetrackerapi.models.exceptions.*;
 import com.example.expirydatetrackerapi.service.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -25,12 +22,14 @@ public class UsersRestController {
     }
 
     @PostMapping("/login")
-    private ResponseEntity<String> login(@RequestParam String username, @RequestParam String password){
-        User user = usersService.login(username, password);
-        if (user != null)
-            return new ResponseEntity<>(user.getAuth_code(), HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Login failed, user with username and password not found", HttpStatus.FORBIDDEN);
+    private ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password){
+        try{
+            User user = usersService.login(username, password);
+            return new ResponseEntity<>(UserAuthenticationDTO.createAuthOf(user), HttpStatus.OK);
+        }
+        catch (UserLoginFailedException exception){
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+        }
 
     }
 
@@ -43,37 +42,36 @@ public class UsersRestController {
             @RequestParam(required = false) String surname,
             @RequestParam String email){
         try{
-            User user = usersService.register(username, password, confirmPassword, name, surname, email);
+            usersService.register(username, password, confirmPassword, name, surname, email);
             return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
         }
         catch (PasswordsDoNotMatchException pe){
-            return new ResponseEntity<>("The passwords do not match.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(pe.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        catch (UserWithEmailAlreadyExists pe){
-            return new ResponseEntity<>("User with username already exists.", HttpStatus.CONFLICT);
+        catch (UserWithUsernameAlreadyExistsException pe){
+            return new ResponseEntity<>(pe.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
     @GetMapping("/{username}/wishlist")
-    private ResponseEntity<List<UserProductsWishlistDTO>> wishlistProductsForUser(@PathVariable String username){
-        List<UserProductsWishlistDTO> wishlist = usersService.getWishlistForUser(username);
-
-        if(wishlist==null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        else{
+    private ResponseEntity<Object> wishlistProductsForUser(@PathVariable String username, @RequestParam String auth_code){
+        try{
+            List<UserProductsWishlistDTO> wishlist = usersService.getWishlistForUser(username,auth_code);
             return new ResponseEntity<>(wishlist, HttpStatus.OK);
+        }
+        catch(UserFailedToAuthenticateException | UserWithUsernameDoesNotExistException fa){
+            return new ResponseEntity<>(fa.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/{username}/expiryList")
-    private ResponseEntity<List<UserProductsExpiryDTO>> expiryListForUser(@PathVariable String username){
-        List<UserProductsExpiryDTO> expiries = usersService.getExpiryListForUser(username);
-        if(expiries==null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        else{
+    private ResponseEntity<Object> expiryListForUser(@PathVariable String username, @RequestParam String auth_code){
+        try{
+            List<UserProductsExpiryDTO> expiries = usersService.getExpiryListForUser(username,auth_code);
             return new ResponseEntity<>(expiries, HttpStatus.OK);
+        }
+        catch(UserFailedToAuthenticateException | UserWithUsernameDoesNotExistException fa){
+            return new ResponseEntity<>(fa.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

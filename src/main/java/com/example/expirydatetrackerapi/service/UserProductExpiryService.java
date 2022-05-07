@@ -1,13 +1,13 @@
 package com.example.expirydatetrackerapi.service;
 
+import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface UserProductExpiryService {
-    UserProductsExpiry addExpiry(String username, Integer productId, LocalDate expiryDate);
-    void deleteExpiry(Integer id);
-    void clearExpiryList(String username);
-    List<UserProductsExpiry> getExpiryListForUser(String username);
+    UserProductsExpiryDTO addExpiry(String username, Integer productId, LocalDate expiryDate, String auth_code);
+    void deleteExpiry(Integer id, String auth_code);
+    void clearExpiryList(String username, String auth_code);
 }

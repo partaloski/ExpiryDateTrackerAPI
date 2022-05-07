@@ -1,11 +1,12 @@
 package com.example.expirydatetrackerapi.service.impl;
 
-import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.User;
 import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
 import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
 import com.example.expirydatetrackerapi.models.exceptions.PasswordsDoNotMatchException;
-import com.example.expirydatetrackerapi.models.exceptions.UserWithEmailAlreadyExists;
+import com.example.expirydatetrackerapi.models.exceptions.UserLoginFailedException;
+import com.example.expirydatetrackerapi.models.exceptions.UserWithUsernameAlreadyExistsException;
+import com.example.expirydatetrackerapi.models.exceptions.UserWithUsernameDoesNotExistException;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import com.example.expirydatetrackerapi.repository.UsersRepository;
@@ -28,14 +29,13 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User login(String username, String password) {
-        Optional<User> user = usersRepository.findUserByUsernameAndPassword(username, password);
-        return user.orElse(null);
+        return usersRepository.findUserByUsernameAndPassword(username, password).orElseThrow(() -> new UserLoginFailedException());
     }
 
     @Override
     public User register(String username, String password, String confirmPassword, String name, String surname, String email) {
         if(usersRepository.findById(username).isPresent())
-            throw new UserWithEmailAlreadyExists(email);
+            throw new UserWithUsernameAlreadyExistsException(email);
         if(password.equals(confirmPassword)){
             User user = new User(username, name, surname, email, password);
             return usersRepository.save(user);
@@ -46,7 +46,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<UserProductsWishlistDTO> getWishlistForUser(String username) {
+    public List<UserProductsWishlistDTO> getWishlistForUser(String username, String auth_code) {
         User user = usersRepository.findById(username).orElse(null);
         if(user == null){
             return null;
@@ -58,7 +58,7 @@ public class UsersServiceImpl implements UsersService {
                 Collection<UserProductsWishlist> wishlist = user.getProductsWishlist();
                 List<UserProductsWishlistDTO> wishlistDTOS = new ArrayList<>();
                 for(UserProductsWishlist wl: wishlist){
-                    wishlistDTOS.add(UserProductsWishlistDTO.createExpiryOf(wl));
+                    wishlistDTOS.add(UserProductsWishlistDTO.createWishlistOf(wl));
                 }
                 return wishlistDTOS;
             }
@@ -66,7 +66,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<UserProductsExpiryDTO> getExpiryListForUser(String username) {
+    public List<UserProductsExpiryDTO> getExpiryListForUser(String username, String auth_code) {
         User user = usersRepository.findById(username).orElse(null);
         if(user == null){
             return null;
@@ -83,5 +83,13 @@ public class UsersServiceImpl implements UsersService {
                 return expiryDTOS;
             }
         }
+    }
+
+    @Override
+    public boolean authenticate(String username, String auth_code) {
+        User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
+        if(!user.getAuth_code().contentEquals(auth_code))
+            return false;
+        return true;
     }
 }

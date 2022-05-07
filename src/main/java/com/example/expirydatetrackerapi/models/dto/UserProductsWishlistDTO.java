@@ -21,7 +21,7 @@ public class UserProductsWishlistDTO {
 
     public UserProductsWishlistDTO() {
     }
-    public static UserProductsWishlistDTO createExpiryOf(UserProductsWishlist expiry){
+    public static UserProductsWishlistDTO createWishlistOf(UserProductsWishlist expiry){
         return new UserProductsWishlistDTO(expiry.getUser(), expiry.getProduct(), expiry.getQuantity());
     }
 }

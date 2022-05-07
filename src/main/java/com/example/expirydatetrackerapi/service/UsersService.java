@@ -11,7 +11,8 @@ import java.util.List;
 
 public interface UsersService {
     User login(String username, String password);
+    boolean authenticate(String username, String auth_code);
     User register(String username, String password, String confirmPassword, String name, String surname, String email);
-    List<UserProductsWishlistDTO> getWishlistForUser(String username);
-    List<UserProductsExpiryDTO> getExpiryListForUser(String username);
+    List<UserProductsWishlistDTO> getWishlistForUser(String username, String auth_code);
+    List<UserProductsExpiryDTO> getExpiryListForUser(String username, String auth_code);
 }

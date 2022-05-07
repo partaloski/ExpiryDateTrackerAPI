@@ -158,7 +158,7 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/login</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Used to log in as a certain user.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Used to log in as a certain user, returns an authentication code, used to then authenticate the user and their actions.</p>
                     </div>
                     <div class="card-footer h-25">
                         <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> username (String), password (String).</p>
@@ -185,10 +185,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/{username}/wishlist</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Used to get all wishlist items for a certain user.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Used to get all wishlist items for a certain user, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-30">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable: <br/> username (String), auth_code(String).</p>
                     </div>
                 </div>
                 <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -197,10 +197,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/{username}/expiryList</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Used to get all expiry items for a certain user.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Used to get all expiry items for a certain user, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-30">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable: <br/> username (String), auth_code(String).</p>
                     </div>
                 </div>
             </div>
@@ -222,10 +222,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/add/e</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a product expires.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a product expires, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-25">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request variables:<br/>username(String), productId(Integer),<br/> expiryDate(LocalDate, "YYYY-MM-DD").</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(Integer),<br/> expiryDate(LocalDate, "YYYY-MM-DD"), auth_code(String).</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -234,10 +234,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/delete/e</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Used to delete a certain expiry from the database.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Used to delete a certain expiry from the database, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-25">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Request Variable: <br/> id (Integer).</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> id (Integer), auth_code(String).</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -246,10 +246,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/<br/>{username}/clear/e</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's expiry list.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's expiry list, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-25">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable: <br/> username (String).</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable: <br/> username (String), auth_code(String).</p>
                     </div>
                 </div>
             </div>
@@ -260,10 +260,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/add/w</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">UUsed to add a relation User-Product, which marks a date when a user wants to buy (wishlists) a product with a given quantity.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a user wants to buy (wishlists) a product with a given quantity, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-25">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request variables:<br/>username(String), productId(Integer), quantity(Integer).</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(Integer), quantity(Integer)<br/>, auth_code(String).</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -272,10 +272,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/delete/w</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Used to delete a certain wishlist item from the database.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Used to delete a certain wishlist item from the database, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-25">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> username (String), productId (Integer).</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> username (String), productId (Integer), auth_code(String).</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -284,10 +284,10 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/<br/>{username}/clear/w</strong></h4>
-                        <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's wishlist.</p>
+                        <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's wishlist, if the authentication code matches.</p>
                     </div>
                     <div class="card-footer h-25">
-                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:  <br/> username (String).</p>
+                        <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable:  <br/> username (String), auth_code(String).</p>
                     </div>
                 </div>
             </div>

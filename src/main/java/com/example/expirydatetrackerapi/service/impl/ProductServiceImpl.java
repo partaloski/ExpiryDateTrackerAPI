@@ -3,7 +3,8 @@ package com.example.expirydatetrackerapi.service.impl;
 import com.example.expirydatetrackerapi.models.Manufacturer;
 import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.exceptions.ManufacturerDoesNotExistException;
-import com.example.expirydatetrackerapi.models.exceptions.ProductWithIdAlreadyExists;
+import com.example.expirydatetrackerapi.models.exceptions.ProductDoesNotExistException;
+import com.example.expirydatetrackerapi.models.exceptions.ProductWithIdAlreadyExistsException;
 import com.example.expirydatetrackerapi.repository.ManufacturerRepository;
 import com.example.expirydatetrackerapi.repository.ProductRepository;
 import com.example.expirydatetrackerapi.service.ProductService;
@@ -33,18 +34,18 @@ public class ProductServiceImpl implements ProductService {
         Manufacturer manufacturer = manufacturerRepository.findById(manufacturer_id).orElseThrow(() -> new ManufacturerDoesNotExistException(manufacturer_id));
         Product product = new Product(id, name, manufacturer);
         if(productRepository.findById(id).isPresent())
-            throw new ProductWithIdAlreadyExists(id);
+            throw new ProductWithIdAlreadyExistsException(id);
         return productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(Integer id) {
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductDoesNotExistException(id));
+        productRepository.delete(product);
     }
 
     @Override
     public Product getProduct(Integer id) {
-        Optional<Product> product = productRepository.findById(id);
-        return product.orElse(null);
+        return productRepository.findById(id).orElseThrow(() -> new ProductDoesNotExistException(id));
     }
 }

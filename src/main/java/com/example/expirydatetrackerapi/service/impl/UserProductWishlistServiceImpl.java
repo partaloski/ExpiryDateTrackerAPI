@@ -2,13 +2,17 @@ package com.example.expirydatetrackerapi.service.impl;
 
 import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.User;
+import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
+import com.example.expirydatetrackerapi.models.exceptions.ProductDoesNotExistException;
+import com.example.expirydatetrackerapi.models.exceptions.UserFailedToAuthenticateException;
+import com.example.expirydatetrackerapi.models.exceptions.UserWithUsernameDoesNotExistException;
 import com.example.expirydatetrackerapi.models.primarykeys.UserProductsWishlistPK;
-import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import com.example.expirydatetrackerapi.repository.ProductRepository;
 import com.example.expirydatetrackerapi.repository.UserProductWishlistRepository;
 import com.example.expirydatetrackerapi.repository.UsersRepository;
 import com.example.expirydatetrackerapi.service.UserProductWishlistService;
+import com.example.expirydatetrackerapi.service.UsersService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,41 +22,33 @@ public class UserProductWishlistServiceImpl implements UserProductWishlistServic
     private final UserProductWishlistRepository repository;
     private final UsersRepository usersRepository;
     private final ProductRepository productRepository;
+    private final UsersService userService;
 
 
-    public UserProductWishlistServiceImpl(UserProductWishlistRepository repository, UsersRepository usersRepository, ProductRepository productRepository) {
+    public UserProductWishlistServiceImpl(UserProductWishlistRepository repository, UsersRepository usersRepository, ProductRepository productRepository, UsersService userService) {
         this.repository = repository;
         this.usersRepository = usersRepository;
         this.productRepository = productRepository;
+        this.userService = userService;
     }
-
     @Override
-    public List<UserProductsWishlist> getWishlistForUser(String username) {
-        User user = usersRepository.findById(username).orElseThrow(() -> new RuntimeException());
-        return repository.findAllByUser(user);
-    }
-
-    @Override
-    public UserProductsWishlist addToWishlist(String username, Integer productId, Integer quantity) {
-        User user = usersRepository.findById(username).orElse(null);
-        user.setProductsExpiries(null);
-        user.setProductsWishlist(null);
-        Product product = productRepository.findById(productId).orElse(null);
-        if(user == null || product == null)
-            return null;
+    public UserProductsWishlistDTO addToWishlist(String username, Integer productId, Integer quantity, String auth_code) {
+        User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
+        if(!userService.authenticate(username,auth_code)){
+            throw new UserFailedToAuthenticateException(username);
+        }
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductDoesNotExistException(productId));
         UserProductsWishlist userProductsWishlist = new UserProductsWishlist(user, product, quantity);
         repository.save(userProductsWishlist);
-        User user2 = userProductsWishlist.getUser();
-        user2.setPassword(null);
-        user2.setProductsExpiries(null);
-        user2.setProductsWishlist(null);
-        userProductsWishlist.setUser(user2);
-        return userProductsWishlist;
+        return UserProductsWishlistDTO.createWishlistOf(userProductsWishlist);
     }
 
     @Override
-    public void removeFromWishlist(String username, Integer productId) {
+    public void removeFromWishlist(String username, Integer productId, String auth_code) {
         User user = usersRepository.findById(username).orElse(null);
+        if(!userService.authenticate(username,auth_code)){
+            throw new UserFailedToAuthenticateException(username);
+        }
         Product product = productRepository.findById(productId).orElse(null);
         if(user == null || product == null)
             throw new RuntimeException();
@@ -61,8 +57,11 @@ public class UserProductWishlistServiceImpl implements UserProductWishlistServic
     }
 
     @Override
-    public void clearWishlist(String username) {
-        User user = usersRepository.getById(username);
+    public void clearWishlist(String username, String auth_code) {
+        User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
+        if(!userService.authenticate(username,auth_code)){
+            throw new UserFailedToAuthenticateException(username);
+        }
         List<UserProductsWishlist> list = repository.findAllByUser(user);
         repository.deleteAll(list);
     }
