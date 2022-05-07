@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EDT API</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <style>
+        .bg-custom-blue{
+            background-color: #0b5ed7;
+        }
+        body{
+            font-family: Calibri;
+        }
+        .toggler{
+            transition: 200ms;
+            outline: 0.15rem solid white;
+        }
+        .toggler:hover{
+            box-shadow: 0rem 0rem 2.5rem #0059ff;
+            outline-color: darkblue;
+        }
+        .bg-gray{
+            background-color: rgb(192,192,192);
+        }
+        .card-title-size{
+            font-size: 2.2rem;
+        }
+        .card-subtitle-size{
+            font-size: 1.2rem;
+            max-width: 100% !important;
+            height: fit-content !important;
+        }
+        .w-90{
+            width: 90% !important;
+        }
+        .bg-custom-image{
+            background-image: url("https://media.istockphoto.com/vectors/hand-drawn-organic-vector-seamless-pattern-vector-id1314442458?b=1&k=20&m=1314442458&s=612x612&w=0&h=SRkGSISKtWyyTGM3HNeuD5JB8K_mNU6j0BPafMvBqqY=");
+            background-size: 150px 150px;
+        }
+        .border-custom{
+            box-shadow: 0em 0em 0.7em 0.7em #0b5ed7;
+        }
+        .alert-darker-info{
+            background-color: #138bff;
+            box-shadow: 0.4rem 0.4rem 0.6rem rgb(8, 55, 101);
+        }
+        .text-justify{
+            text-align: justify !important;
+        }
+        .bigger-text{
+            font-size: 1.5rem;
+        }
+        .custom-shadow{
+            transition: 250ms;
+            box-shadow: 0rem 0rem 0rem #0dcaf0;
+        }
+        .custom-shadow:hover{
+            box-shadow: 0rem 0.8rem 1.4rem #0dcaf0;
+        }
+        #productdiv, #userdiv, #manufacturerdiv, #pudiv{
+            box-shadow: 0.8rem 0.8rem 1.5rem rgba(0,0,0,0.5);
+        }
+        .card{
+            border-radius: 0.2rem !important;
+            outline: 0.15rem solid gray ;
+        }
+        .w-10{
+            width: 55px;
+        }
+        .lang-active{
+            box-shadow: 0rem 0.7rem 1.5rem #198754;
+            outline: 0.15rem solid rgb(128,255,128);
+        }
+        .lang{
+            box-shadow: 0rem 0rem 1.2rem #000000;
+            outline: 0.15rem solid white;
+        }
+    </style>
+</head>
+<body class="bg-custom-image">
+<div class="nav container sticky-top pt-0 ct">
+    <a href="/?lang=EN" class="w-10 ms-auto mt-0 bg-secondary rounded-bottom mx-2 p-1 lang-active"><img class="mx-auto" th:src="@{/flag/us.png}" height="45" width="45"/></a>
+    <a href="/?lang=MK" class="w-10 ms-1 mt-0 bg-secondary rounded-bottom mx-2 p-1 lang"><img class="mx-auto" th:src="@{/flag/mk.png}" height="45" width="45"/></a>
+</div>
+<div class="container mt-2 mb-5 bg-light p-5 text-white rounded-3 border-custom">
+    <h1 class="display-4 text-center text-info bg-dark p-2 rounded-2 mb-5 custom-shadow">Expiry Date Tracker API</h1>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+    </svg>
+    <div class="alert alert-darker-info alert-dismissible slide show w-90 mx-auto fly-out fade " role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+        <strong class="bigger-text">What is the Expiry Date Tracker API?</strong>
+        <p class="w-90 text-justify mx-auto">An API made in Java using Spring Boot and Rest API controllers, to help an external website or a mobile application communicate with a database without the developer worrying too much, a quick summary of all of the functions available can be found down below, <strong>tap on the big blue buttons</strong> to get information about certain parts of the API.</p>
+        <button type="button" class="btn-close btn-close-shadow" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <hr>
+    <a
+            data-bs-toggle="collapse"
+            href="#productdiv"
+            role="button"
+            aria-expanded="false"
+            aria-controls="productdiv"
+            class="my-5 display-6 text-white text-decoration-none small d-block p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+        Products
+    </a>
+    <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="productdiv">
+        <div class="row">
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/products/</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Retrieves a list of all products.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects no variables.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/products/add</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to add a product into the database.</p>
+                </div>
+                <div class="card-footer  h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> id (Integer), name (String), manufacturer_id (Integer).</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/products/delete/{ID}</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Deletes the product which can be identified with the <strong>[ID]</strong> attribute.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:<br/>id (Integer)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a
+            data-bs-toggle="collapse"
+            href="#manufacturerdiv"
+            role="button"
+            aria-expanded="false"
+            aria-controls="manufacturerdiv"
+            class="display-6 text-white text-decoration-none small d-block my-5 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+        Manufacturers
+    </a>
+    <div id="manufacturerdiv" class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2">
+        <div class="row">
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/manufacturers/</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Retrieves a list of all manufacturers.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects no variables.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/manufacturers/add</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to add a manufacturer into the database.</p>
+                </div>
+                <div class="card-footer  h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Request Variable: <br/>name (String).</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/manufacturers/delete/{ID}</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Deletes the manufacturer which can be identified with the <strong>[ID]</strong> attribute.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:<br/>id (Integer)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a
+            data-bs-toggle="collapse"
+            href="#userdiv"
+            role="button"
+            aria-expanded="false"
+            aria-controls="userdiv"
+            class="display-6 text-white text-decoration-none small d-block my-5 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+        Users
+    </a>
+    <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="userdiv">
+        <div class="row mb-2">
+            <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/login</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to log in as a certain user, returns an authentication code, used to then authenticate the user and their actions.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> username (String), password (String).</p>
+                </div>
+            </div>
+            <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/register</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to register a new user into the database.</p>
+                </div>
+                <div class="card-footer h-30">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 6 Request Variables: <br/> username (String), password (String), confirmPassword (String), name (String), surname (String), email (String).</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+
+            <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/{username}/wishlist</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to get all wishlist items for a certain user, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-30">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable: <br/> username (String), auth_code(String).</p>
+                </div>
+            </div>
+            <div class="col-lg-5 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-success rounded-1 text-center card-title-size">GET</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/users/{username}/expiryList</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to get all expiry items for a certain user, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-30">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable: <br/> username (String), auth_code(String).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a
+            data-bs-toggle="collapse"
+            href="#pudiv"
+            role="button"
+            aria-expanded="false"
+            aria-controls="pudiv"
+            class="display-6 text-white text-decoration-none small d-block my-5 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+        Products-Users
+    </a>
+    <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="pudiv">
+        <div class="row mb-2">
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/add/e</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a product expires, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(Integer),<br/> expiryDate(LocalDate, "YYYY-MM-DD"), auth_code(String).</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/delete/e</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to delete a certain expiry from the database, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 2 Request Variables: <br/> id (Integer), auth_code(String).</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/<br/>{username}/clear/e</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's expiry list, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable: <br/> username (String), auth_code(String).</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-warning rounded-1 text-center card-title-size">POST</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/add/w</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a user wants to buy (wishlists) a product with a given quantity, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(Integer), quantity(Integer)<br/>, auth_code(String).</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/delete/w</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Used to delete a certain wishlist item from the database, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> username (String), productId (Integer), auth_code(String).</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
+                <div class="card-header">
+                    <h4 class="card-title bg-danger rounded-1 text-center card-title-size">DELETE</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title bg-info rounded-1 w-90 mx-auto text-center card-subtitle-size"><strong>/api/productsUsers/<br/>{username}/clear/w</strong></h4>
+                    <p class="mx-auto w-75 text-center text-dark">Clears the user with the username variable's wishlist, if the authentication code matches.</p>
+                </div>
+                <div class="card-footer h-25">
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable and 1 Request Variable:  <br/> username (String), auth_code(String).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
