@@ -18,9 +18,11 @@
         }
         .toggler{
             transition: 200ms;
+            outline: 0.15rem solid white;
         }
         .toggler:hover{
-            background: darkblue !important;
+            box-shadow: 0rem 0rem 2.5rem #0059ff;
+            outline-color: darkblue;
         }
         .bg-gray{
             background-color: rgb(192,192,192);
@@ -36,11 +38,53 @@
         .w-90{
             width: 90% !important;
         }
+        .bg-custom-image{
+            background-image: url("https://media.istockphoto.com/vectors/hand-drawn-organic-vector-seamless-pattern-vector-id1314442458?b=1&k=20&m=1314442458&s=612x612&w=0&h=SRkGSISKtWyyTGM3HNeuD5JB8K_mNU6j0BPafMvBqqY=");
+            background-size: 150px 150px;
+        }
+        .border-custom{
+            box-shadow: 0em 0em 0.7em 0.7em #0b5ed7;
+        }
+        .alert-darker-info{
+            background-color: #138bff;
+            box-shadow: 0.4rem 0.4rem 0.6rem rgb(8, 55, 101);
+        }
+        .text-justify{
+            text-align: justify !important;
+        }
+        .bigger-text{
+            font-size: 1.5rem;
+        }
+        .custom-shadow{
+            transition: 250ms;
+            box-shadow: 0rem 0rem 0rem #0dcaf0;
+        }
+        .custom-shadow:hover{
+            box-shadow: 0rem 0.8rem 1.4rem #0dcaf0;
+        }
+        #productdiv, #userdiv, #manufacturerdiv, #pudiv{
+            box-shadow: 0.8rem 0.8rem 1.5rem rgba(0,0,0,0.5);
+        }
+        .card{
+            border-radius: 0.2rem !important;
+            outline: 0.15rem solid gray ;
+        }
     </style>
 </head>
-<body class="bg-dark">
-    <div class="container mt-4 bg-light p-5 text-white rounded-3">
-        <h1 class="display-4 text-center text-info bg-dark p-2 rounded-2">Expiry Date Tracker API</h1>
+<body class="bg-custom-image">
+    <div class="container my-5 bg-light p-5 text-white rounded-3 border-custom">
+        <h1 class="display-4 text-center text-info bg-dark p-2 rounded-2 mb-5 custom-shadow">Expiry Date Tracker API</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </symbol>
+        </svg>
+        <div class="alert alert-darker-info alert-dismissible slide show w-90 mx-auto fly-out fade " role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+            <strong class="bigger-text">What is the Expiry Date Tracker API?</strong>
+            <p class="w-90 text-justify mx-auto">An API made in Java using Spring Boot and Rest API controllers, to help an external website or a mobile application communicate with a database without the developer worrying too much, a quick summary of all of the functions available can be found down below, <strong>tap on the big blue buttons</strong> to get information about certain parts of the API.</p>
+            <button type="button" class="btn-close btn-close-shadow" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <hr>
         <a
                 data-bs-toggle="collapse"
@@ -48,7 +92,7 @@
                 role="button"
                 aria-expanded="false"
                 aria-controls="productdiv"
-                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+                class="my-5 display-6 text-white text-decoration-none small d-block p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
             Products
         </a>
         <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="productdiv">
@@ -97,7 +141,7 @@
                 role="button"
                 aria-expanded="false"
                 aria-controls="manufacturerdiv"
-                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+                class="display-6 text-white text-decoration-none small d-block my-5 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
             Manufacturers
         </a>
         <div id="manufacturerdiv" class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2">
@@ -147,7 +191,7 @@
                 role="button"
                 aria-expanded="false"
                 aria-controls="userdiv"
-                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+                class="display-6 text-white text-decoration-none small d-block my-5 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
             Users
         </a>
         <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="userdiv">
@@ -211,7 +255,7 @@
                 role="button"
                 aria-expanded="false"
                 aria-controls="pudiv"
-                class="display-6 text-white text-decoration-none small d-block mb-3 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
+                class="display-6 text-white text-decoration-none small d-block my-5 p-2 rounded-2 bg-custom-blue w-75 text-center mx-auto toggler">
             Products-Users
         </a>
         <div class="container collapse multi-collapse rounded-1 p-4 bg-gray m-2" id="pudiv">
