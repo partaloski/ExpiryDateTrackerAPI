@@ -1,5 +1,6 @@
 package com.example.expirydatetrackerapi.models;
 
+import com.example.expirydatetrackerapi.helpers.AuthCodeGenerator;
 import com.example.expirydatetrackerapi.models.dto.UserDTO;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
@@ -28,6 +29,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "auth_code", length = 32, columnDefinition="bpchar")
+    private String auth_code;
+
     @OneToMany(mappedBy="user")
     private Collection<UserProductsExpiry> productsExpiries;
 
@@ -40,6 +44,7 @@ public class User {
         this.surname = surname;
         this.email = email;
         this.password = password;
+        this.auth_code = AuthCodeGenerator.generate();
     }
 
     public UserDTO generateDTO(){

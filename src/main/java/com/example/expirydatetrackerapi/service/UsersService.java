@@ -10,7 +10,7 @@ import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import java.util.List;
 
 public interface UsersService {
-    boolean login(String username, String password);
+    User login(String username, String password);
     User register(String username, String password, String confirmPassword, String name, String surname, String email);
     List<UserProductsWishlistDTO> getWishlistForUser(String username);
     List<UserProductsExpiryDTO> getExpiryListForUser(String username);

@@ -26,8 +26,9 @@ public class UsersRestController {
 
     @PostMapping("/login")
     private ResponseEntity<String> login(@RequestParam String username, @RequestParam String password){
-        if (usersService.login(username, password))
-            return new ResponseEntity<>("Login successful.", HttpStatus.OK);
+        User user = usersService.login(username, password);
+        if (user != null)
+            return new ResponseEntity<>(user.getAuth_code(), HttpStatus.OK);
         else
             return new ResponseEntity<>("Login failed, user with username and password not found", HttpStatus.FORBIDDEN);
 
