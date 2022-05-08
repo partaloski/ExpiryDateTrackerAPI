@@ -1,6 +1,7 @@
 package com.example.expirydatetrackerapi.web.controller.rest;
 
 import com.example.expirydatetrackerapi.models.Manufacturer;
+import com.example.expirydatetrackerapi.models.dto.ManufacturersDTO;
 import com.example.expirydatetrackerapi.models.exceptions.ManufacturerDoesNotExistException;
 import com.example.expirydatetrackerapi.service.ManufacturerService;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ public class ManufacturerRestController {
     }
 
     @GetMapping()
-    public List<Manufacturer> findAll(){
-        return manufacturerService.findAll();
+    public ManufacturersDTO findAll(){
+        return ManufacturersDTO.createOf(manufacturerService.findAll());
     }
 
     @PostMapping("/add")

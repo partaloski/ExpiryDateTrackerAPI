@@ -1,9 +1,7 @@
 package com.example.expirydatetrackerapi.web.controller.rest;
 
 import com.example.expirydatetrackerapi.models.User;
-import com.example.expirydatetrackerapi.models.dto.UserAuthenticationDTO;
-import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
-import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
+import com.example.expirydatetrackerapi.models.dto.*;
 import com.example.expirydatetrackerapi.models.exceptions.*;
 import com.example.expirydatetrackerapi.service.UsersService;
 import org.springframework.http.HttpStatus;
@@ -56,7 +54,7 @@ public class UsersRestController {
     @GetMapping("/{username}/wishlist")
     private ResponseEntity<Object> wishlistProductsForUser(@PathVariable String username, @RequestParam String auth_code){
         try{
-            List<UserProductsWishlistDTO> wishlist = usersService.getWishlistForUser(username,auth_code);
+            UserWishlistsDTO wishlist = UserWishlistsDTO.createOf(usersService.getWishlistForUser(username,auth_code));
             return new ResponseEntity<>(wishlist, HttpStatus.OK);
         }
         catch(UserFailedToAuthenticateException | UserWithUsernameDoesNotExistException fa){
@@ -67,7 +65,7 @@ public class UsersRestController {
     @GetMapping("/{username}/expiryList")
     private ResponseEntity<Object> expiryListForUser(@PathVariable String username, @RequestParam String auth_code){
         try{
-            List<UserProductsExpiryDTO> expiries = usersService.getExpiryListForUser(username,auth_code);
+            UserExpiriesDTO expiries = UserExpiriesDTO.createOf(usersService.getExpiryListForUser(username,auth_code));
             return new ResponseEntity<>(expiries, HttpStatus.OK);
         }
         catch(UserFailedToAuthenticateException | UserWithUsernameDoesNotExistException fa){
