@@ -3,10 +3,7 @@ package com.example.expirydatetrackerapi.service.impl;
 import com.example.expirydatetrackerapi.models.User;
 import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
 import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
-import com.example.expirydatetrackerapi.models.exceptions.PasswordsDoNotMatchException;
-import com.example.expirydatetrackerapi.models.exceptions.UserLoginFailedException;
-import com.example.expirydatetrackerapi.models.exceptions.UserWithUsernameAlreadyExistsException;
-import com.example.expirydatetrackerapi.models.exceptions.UserWithUsernameDoesNotExistException;
+import com.example.expirydatetrackerapi.models.exceptions.*;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import com.example.expirydatetrackerapi.repository.UsersRepository;
@@ -47,41 +44,35 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<UserProductsWishlistDTO> getWishlistForUser(String username, String auth_code) {
-        User user = usersRepository.findById(username).orElse(null);
-        if(user == null){
-            return null;
-        }
+        User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
+        if(!this.authenticate(username, auth_code))
+            throw new UserFailedToAuthenticateException(username);
+        if(user.getProductsWishlist().size() == 0)
+            return new ArrayList<>();
         else{
-            if(user.getProductsWishlist().size() == 0)
-                return new ArrayList<>();
-            else{
-                Collection<UserProductsWishlist> wishlist = user.getProductsWishlist();
-                List<UserProductsWishlistDTO> wishlistDTOS = new ArrayList<>();
-                for(UserProductsWishlist wl: wishlist){
-                    wishlistDTOS.add(UserProductsWishlistDTO.createWishlistOf(wl));
-                }
-                return wishlistDTOS;
+            Collection<UserProductsWishlist> wishlist = user.getProductsWishlist();
+            List<UserProductsWishlistDTO> wishlistDTOS = new ArrayList<>();
+            for(UserProductsWishlist wl: wishlist){
+                wishlistDTOS.add(UserProductsWishlistDTO.createWishlistOf(wl));
             }
+            return wishlistDTOS;
         }
     }
 
     @Override
     public List<UserProductsExpiryDTO> getExpiryListForUser(String username, String auth_code) {
-        User user = usersRepository.findById(username).orElse(null);
-        if(user == null){
-            return null;
-        }
+        User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
+        if(!this.authenticate(username, auth_code))
+            throw new UserFailedToAuthenticateException(username);
+        if(user.getProductsExpiries().size() == 0)
+            return new ArrayList<>();
         else{
-            if(user.getProductsExpiries().size() == 0)
-                return new ArrayList<>();
-            else{
-                Collection<UserProductsExpiry> expiries = user.getProductsExpiries();
-                List<UserProductsExpiryDTO> expiryDTOS = new ArrayList<>();
-                for(UserProductsExpiry e: expiries){
-                    expiryDTOS.add(UserProductsExpiryDTO.createExpiryOf(e));
-                }
-                return expiryDTOS;
+            Collection<UserProductsExpiry> expiries = user.getProductsExpiries();
+            List<UserProductsExpiryDTO> expiryDTOS = new ArrayList<>();
+            for(UserProductsExpiry e: expiries){
+                expiryDTOS.add(UserProductsExpiryDTO.createExpiryOf(e));
             }
+            return expiryDTOS;
         }
     }
 
