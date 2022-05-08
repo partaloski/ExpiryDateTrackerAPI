@@ -1,6 +1,7 @@
 package com.example.expirydatetrackerapi.web.controller.rest;
 
 import com.example.expirydatetrackerapi.models.Product;
+import com.example.expirydatetrackerapi.models.dto.ProductsDTO;
 import com.example.expirydatetrackerapi.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,8 @@ public class ProductRestController {
     }
 
     @GetMapping()
-    public List<Product> getAll(){
-        return productService.findAll();
+    public ProductsDTO getAll(){
+        return ProductsDTO.createOf(productService.findAll());
     }
 
     @GetMapping("/get/{id}")
