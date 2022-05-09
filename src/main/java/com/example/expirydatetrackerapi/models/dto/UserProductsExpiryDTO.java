@@ -9,13 +9,14 @@ import java.time.LocalDate;
 
 @Data
 public class UserProductsExpiryDTO {
+    private Integer id;
     private UserDTO user;
     private Product product;
     private LocalDate expiryDate;
 
-    public UserProductsExpiryDTO(User user, Product product, LocalDate expiryDate) {
-        UserDTO userDto = UserDTO.createOfUser(user);
-        this.user = userDto;
+    public UserProductsExpiryDTO(Integer id, User user, Product product, LocalDate expiryDate) {
+        this.id = id;
+        this.user = UserDTO.createOfUser(user);
         this.product = product;
         this.expiryDate = expiryDate;
     }
@@ -24,7 +25,7 @@ public class UserProductsExpiryDTO {
     }
 
     public static UserProductsExpiryDTO createExpiryOf(UserProductsExpiry expiry){
-        return new UserProductsExpiryDTO(expiry.getUser(), expiry.getProduct(), expiry.getExpirydate());
+        return new UserProductsExpiryDTO(expiry.getID(), expiry.getUser(), expiry.getProduct(), expiry.getExpirydate());
     }
 
 }
