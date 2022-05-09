@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product addProduct(Integer id, String name, Integer manufacturer_id) {
+    public Product addProduct(String id, String name, Integer manufacturer_id) {
         Manufacturer manufacturer = manufacturerRepository.findById(manufacturer_id).orElseThrow(() -> new ManufacturerDoesNotExistException(manufacturer_id));
         Product product = new Product(id, name, manufacturer);
         if(productRepository.findById(id).isPresent())
@@ -39,13 +39,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Integer id) {
+    public void deleteProduct(String id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductDoesNotExistException(id));
         productRepository.delete(product);
     }
 
     @Override
-    public Product getProduct(Integer id) {
+    public Product getProduct(String id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductDoesNotExistException(id));
     }
 }

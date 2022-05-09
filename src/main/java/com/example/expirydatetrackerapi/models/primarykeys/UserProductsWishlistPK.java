@@ -15,9 +15,9 @@ public class UserProductsWishlistPK implements Serializable {
     private String username;
 
     @Column(name="productid")
-    private Integer productId;
+    private String productId;
 
-    public UserProductsWishlistPK(String username, Integer productId) {
+    public UserProductsWishlistPK(String username, String productId) {
         this.username = username;
         this.productId = productId;
     }

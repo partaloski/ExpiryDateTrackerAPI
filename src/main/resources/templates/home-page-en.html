@@ -130,7 +130,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Used to add a product into the database.</p>
                 </div>
                 <div class="card-footer  h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> id (Integer), name (String), manufacturer_id (Integer).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> id (String), name (String), manufacturer_id (Integer).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -142,7 +142,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Deletes the product which can be identified with the <strong>[ID]</strong> attribute.</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:<br/>id (Integer)</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 1 Path Variable:<br/>id (String)</p>
                 </div>
             </div>
         </div>
@@ -281,7 +281,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a product expires, if the authentication code matches.</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(Integer),<br/> expiryDate(LocalDate, "YYYY-MM-DD"), auth_code(String).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(String),<br/> expiryDate(LocalDate, "YYYY-MM-DD"), auth_code(String).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -319,7 +319,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Used to add a relation User-Product, which marks a date when a user wants to buy (wishlists) a product with a given quantity, if the authentication code matches.</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(Integer), quantity(Integer)<br/>, auth_code(String).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 4 Request variables:<br/>username(String), productId(String), quantity(Integer)<br/>, auth_code(String).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -331,7 +331,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Used to delete a certain wishlist item from the database, if the authentication code matches.</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> username (String), productId (Integer), auth_code(String).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Expects 3 Request Variables: <br/> username (String), productId (String), auth_code(String).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">

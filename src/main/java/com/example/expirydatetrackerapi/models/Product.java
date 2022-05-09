@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Product {
     @Id
     @Column(name = "id")
-    private Integer productId;
+    private String productId;
 
     @Column(name = "name")
     private String name;
@@ -19,7 +19,7 @@ public class Product {
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
-    public Product(Integer productId, String name, Manufacturer manufacturer) {
+    public Product(String productId, String name, Manufacturer manufacturer) {
         this.productId = productId;
         this.name = name;
         this.manufacturer = manufacturer;

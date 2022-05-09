@@ -33,7 +33,7 @@ public class UserProductExpiryServiceImpl implements UserProductExpiryService {
     }
 
     @Override
-    public UserProductsExpiryDTO addExpiry(String username, Integer productId, LocalDate expiryDate, String auth_code) {
+    public UserProductsExpiryDTO addExpiry(String username, String productId, LocalDate expiryDate, String auth_code) {
         User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
         if(!userService.authenticate(username,auth_code)){
             throw new UserFailedToAuthenticateException(username);

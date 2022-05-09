@@ -32,7 +32,7 @@ public class UserProductWishlistServiceImpl implements UserProductWishlistServic
         this.userService = userService;
     }
     @Override
-    public UserProductsWishlistDTO addToWishlist(String username, Integer productId, Integer quantity, String auth_code) {
+    public UserProductsWishlistDTO addToWishlist(String username, String productId, Integer quantity, String auth_code) {
         User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
         if(!userService.authenticate(username,auth_code)){
             throw new UserFailedToAuthenticateException(username);
@@ -44,7 +44,7 @@ public class UserProductWishlistServiceImpl implements UserProductWishlistServic
     }
 
     @Override
-    public void removeFromWishlist(String username, Integer productId, String auth_code) {
+    public void removeFromWishlist(String username, String productId, String auth_code) {
         User user = usersRepository.findById(username).orElse(null);
         if(!userService.authenticate(username,auth_code)){
             throw new UserFailedToAuthenticateException(username);

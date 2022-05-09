@@ -130,7 +130,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Се користи за да се додаваат нови продукти во базата на податоци.</p>
                 </div>
                 <div class="card-footer  h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Очекува 3 Request променливи: <br/> id (Integer), name (String), manufacturer_id (Integer).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Очекува 3 Request променливи: <br/> id (String), name (String), manufacturer_id (Integer).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -142,7 +142,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Го бриши продуктот кој се идентификува со <strong>[ID]</strong> атрибутот.</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Очекува 1 Path промелнива:<br/>id (Integer)</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Очекува 1 Path промелнива:<br/>id (String)</p>
                 </div>
             </div>
         </div>
@@ -281,7 +281,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Се користи за да се додаде ставка како релацијата помеѓу Корисник и Продукт, со оваа релација се обележува истекување на даден производ, се додава само доколку доставениот автентикациски код е точен.</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Очекува 4 Request променливи:<br/>username(String), productId(Integer),<br/> expiryDate(LocalDate, "YYYY-MM-DD"), auth_code(String).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Очекува 4 Request променливи:<br/>username(String), productId(String),<br/> expiryDate(LocalDate, "YYYY-MM-DD"), auth_code(String).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -319,7 +319,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Се користи за да се додаде ставка како релацијата помеѓу Корисник и Продукт, со оваа релација се обележува дека некој корисник го посакува даден производ како и колку од тој производ сака да купи во квантитет, се додава само доколку доставениот автентикациски код е точен</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Очекува 4 Request променливи:<br/>username(String), productId(Integer), quantity(Integer)<br/>, auth_code(String).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Очекува 4 Request променливи:<br/>username(String), productId(String), quantity(Integer)<br/>, auth_code(String).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">
@@ -331,7 +331,7 @@
                     <p class="mx-auto w-75 text-center text-dark">Се користи за да се избрише дадена ставка, само доколку автентикацискиот код кој е доставен е точен.</p>
                 </div>
                 <div class="card-footer h-25">
-                    <p class="small mx-auto w-100 text-center text-muted">Очекува 3 Request променливи: <br/> username (String), productId (Integer), auth_code(String).</p>
+                    <p class="small mx-auto w-100 text-center text-muted">Очекува 3 Request променливи: <br/> username (String), productId (String), auth_code(String).</p>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-8 mb-sm-2 mx-auto card p-2 rounded-0">

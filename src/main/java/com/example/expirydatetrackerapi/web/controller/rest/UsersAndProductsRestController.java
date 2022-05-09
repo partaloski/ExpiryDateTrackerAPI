@@ -31,7 +31,7 @@ public class UsersAndProductsRestController {
     @PostMapping("/add/e")
     public ResponseEntity<Object> addExpiry (
             @RequestParam String username,
-            @RequestParam Integer productId,
+            @RequestParam String productId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate expiryDate,
             @RequestParam String auth_code){
         try{
@@ -72,7 +72,7 @@ public class UsersAndProductsRestController {
 
 
     @PostMapping("/add/w")
-    public ResponseEntity<UserProductsWishlistDTO> addWishlist (@RequestParam String username, @RequestParam Integer productId, @RequestParam Integer quantity, @RequestParam String auth_code){
+    public ResponseEntity<UserProductsWishlistDTO> addWishlist (@RequestParam String username, @RequestParam String productId, @RequestParam Integer quantity, @RequestParam String auth_code){
         UserProductsWishlistDTO userProductsWishlistDTO = serviceWishlist.addToWishlist(username, productId, quantity, auth_code);
         if(userProductsWishlistDTO == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -82,7 +82,7 @@ public class UsersAndProductsRestController {
     }
 
     @DeleteMapping("/delete/w")
-    public ResponseEntity<String> removeWishlistItem (@RequestParam String username, @RequestParam Integer productId, @RequestParam String auth_code){
+    public ResponseEntity<String> removeWishlistItem (@RequestParam String username, @RequestParam String productId, @RequestParam String auth_code){
         try{
             serviceWishlist.removeFromWishlist(username, productId, auth_code);
         }

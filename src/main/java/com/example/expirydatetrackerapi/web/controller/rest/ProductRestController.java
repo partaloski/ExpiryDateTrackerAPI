@@ -24,7 +24,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable Integer id){
+    public ResponseEntity<Product> getProduct(@PathVariable String id){
         Product p = productService.getProduct(id);
         if (p != null){
             return ResponseEntity.ok().body(p);
@@ -33,12 +33,12 @@ public class ProductRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Product> saveProduct(@RequestParam Integer id, @RequestParam String name, @RequestParam Integer manufacturer_id){
+    public ResponseEntity<Product> saveProduct(@RequestParam String id, @RequestParam String name, @RequestParam Integer manufacturer_id){
         return ResponseEntity.ok().body(productService.addProduct(id, name, manufacturer_id));
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Integer id){
+    public ResponseEntity<String> deleteProduct(@PathVariable String id){
         productService.deleteProduct(id);
         return ResponseEntity.ok().body("Product deleted (or never existed)");
     }
