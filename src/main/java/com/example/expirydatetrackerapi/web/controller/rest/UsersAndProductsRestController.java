@@ -1,5 +1,6 @@
 package com.example.expirydatetrackerapi.web.controller.rest;
 
+import com.example.expirydatetrackerapi.helpers.DateParser;
 import com.example.expirydatetrackerapi.models.User;
 import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
 import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
@@ -32,10 +33,11 @@ public class UsersAndProductsRestController {
     public ResponseEntity<Object> addExpiry (
             @RequestParam String username,
             @RequestParam String productId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate expiryDate,
+            @RequestParam String expiryDate,
             @RequestParam String auth_code){
         try{
-            UserProductsExpiryDTO userProductsExpiryDTO = serviceExpiry.addExpiry(username, productId, expiryDate, auth_code);
+            LocalDate date = DateParser.parseDate(expiryDate);
+            UserProductsExpiryDTO userProductsExpiryDTO = serviceExpiry.addExpiry(username, productId, date, auth_code);
             if(userProductsExpiryDTO == null){
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
