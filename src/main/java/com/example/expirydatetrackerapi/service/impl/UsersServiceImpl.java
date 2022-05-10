@@ -72,6 +72,7 @@ public class UsersServiceImpl implements UsersService {
             for(UserProductsExpiry e: expiries){
                 expiryDTOS.add(UserProductsExpiryDTO.createExpiryOf(e));
             }
+            expiryDTOS.sort(UserProductsExpiryDTO.comparator);
             return expiryDTOS;
         }
     }

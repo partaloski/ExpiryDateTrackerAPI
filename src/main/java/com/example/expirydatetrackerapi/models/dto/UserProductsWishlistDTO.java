@@ -6,6 +6,8 @@ import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import lombok.Data;
 
+import java.util.Comparator;
+
 @Data
 public class UserProductsWishlistDTO {
     private UserDTO user;

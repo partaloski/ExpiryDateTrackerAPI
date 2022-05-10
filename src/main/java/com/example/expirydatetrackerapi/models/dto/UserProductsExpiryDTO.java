@@ -6,6 +6,7 @@ import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
 @Data
 public class UserProductsExpiryDTO {
@@ -27,5 +28,7 @@ public class UserProductsExpiryDTO {
     public static UserProductsExpiryDTO createExpiryOf(UserProductsExpiry expiry){
         return new UserProductsExpiryDTO(expiry.getID(), expiry.getUser(), expiry.getProduct(), expiry.getExpirydate());
     }
+
+    public static Comparator<UserProductsExpiryDTO> comparator = Comparator.comparing(UserProductsExpiryDTO::getExpiryDate);
 
 }
