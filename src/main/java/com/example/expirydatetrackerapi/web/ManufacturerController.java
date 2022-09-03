@@ -1,22 +1,18 @@
-package com.example.expirydatetrackerapi.web.controller.rest;
+package com.example.expirydatetrackerapi.web;
 
 import com.example.expirydatetrackerapi.models.Manufacturer;
 import com.example.expirydatetrackerapi.models.dto.ManufacturersDTO;
-import com.example.expirydatetrackerapi.models.exceptions.ManufacturerDoesNotExistException;
 import com.example.expirydatetrackerapi.service.ManufacturerService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/manufacturers")
-public class ManufacturerRestController {
+public class ManufacturerController {
 
     private final ManufacturerService manufacturerService;
 
-    public ManufacturerRestController(ManufacturerService manufacturerService) {
+    public ManufacturerController(ManufacturerService manufacturerService) {
         this.manufacturerService = manufacturerService;
     }
 

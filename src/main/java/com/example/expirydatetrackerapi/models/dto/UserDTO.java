@@ -2,8 +2,10 @@ package com.example.expirydatetrackerapi.models.dto;
 
 import com.example.expirydatetrackerapi.models.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserDTO {
     private String username;
     private String name;

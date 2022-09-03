@@ -11,7 +11,6 @@ public class AuthCodeGenerator {
         for(int i=0; i<32; i++){
             auth_code.append(characters[random.nextInt(characters.length)]);
         }
-        System.out.println(auth_code);
         return auth_code.toString();
     }
 }

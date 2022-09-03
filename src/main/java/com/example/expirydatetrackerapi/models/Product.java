@@ -1,12 +1,14 @@
 package com.example.expirydatetrackerapi.models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="products")
 @Data
+@Entity
+@NoArgsConstructor
+@Table(name="products")
 public class Product {
     @Id
     @Column(name = "id")
@@ -23,8 +25,5 @@ public class Product {
         this.productId = productId;
         this.name = name;
         this.manufacturer = manufacturer;
-    }
-
-    public Product() {
     }
 }

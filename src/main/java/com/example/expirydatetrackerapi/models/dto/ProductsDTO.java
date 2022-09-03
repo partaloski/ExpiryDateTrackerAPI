@@ -2,10 +2,12 @@ package com.example.expirydatetrackerapi.models.dto;
 
 import com.example.expirydatetrackerapi.models.Product;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class ProductsDTO {
     private List<Product> Products;
 
@@ -17,6 +19,4 @@ public class ProductsDTO {
         return new ProductsDTO(products);
     }
 
-    public ProductsDTO() {
-    }
 }

@@ -5,10 +5,12 @@ import com.example.expirydatetrackerapi.models.User;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Comparator;
 
 @Data
+@NoArgsConstructor
 public class UserProductsWishlistDTO {
     private UserDTO user;
     private Product product;
@@ -19,9 +21,6 @@ public class UserProductsWishlistDTO {
         this.user = userDTO;
         this.product = product;
         this.quantity = quantity;
-    }
-
-    public UserProductsWishlistDTO() {
     }
     public static UserProductsWishlistDTO createWishlistOf(UserProductsWishlist expiry){
         return new UserProductsWishlistDTO(expiry.getUser(), expiry.getProduct(), expiry.getQuantity());

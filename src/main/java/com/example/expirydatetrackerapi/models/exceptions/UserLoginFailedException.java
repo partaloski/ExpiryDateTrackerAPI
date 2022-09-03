@@ -1,7 +1,10 @@
 package com.example.expirydatetrackerapi.models.exceptions;
 
-public class UserLoginFailedException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+public class UserLoginFailedException extends ResponseStatusException {
     public UserLoginFailedException() {
-        super("The username and password combination doesn't match any of our database entries.");
+        super(HttpStatus.BAD_REQUEST,"The username and password combination doesn't match any of our database entries.");
     }
 }

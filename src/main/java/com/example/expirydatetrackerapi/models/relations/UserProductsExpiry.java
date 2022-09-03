@@ -33,6 +33,13 @@ public class UserProductsExpiry {
     public UserProductsExpiry() {
     }
 
+    public UserProductsExpiry(Integer ID, User user, Product product, LocalDate expirydate) {
+        this.ID = ID;
+        this.user = user;
+        this.product = product;
+        this.expirydate = expirydate;
+    }
+
     public UserProductsExpiry(User user, Product product, LocalDate expirydate) {
         this.user = user;
         this.product = product;
@@ -45,10 +52,5 @@ public class UserProductsExpiry {
         if (o == null || getClass() != o.getClass()) return false;
         UserProductsExpiry that = (UserProductsExpiry) o;
         return Objects.equals(ID, that.ID) && Objects.equals(user, that.user) && Objects.equals(product, that.product) && Objects.equals(expirydate, that.expirydate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ID, user, product, expirydate);
     }
 }
