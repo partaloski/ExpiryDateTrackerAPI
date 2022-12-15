@@ -16,6 +16,8 @@ import com.example.expirydatetrackerapi.repository.UsersRepository;
 import com.example.expirydatetrackerapi.service.impl.UserProductExpiryServiceImpl;
 import com.example.expirydatetrackerapi.service.impl.UserProductWishlistServiceImpl;
 import com.example.expirydatetrackerapi.service.impl.UsersServiceImpl;
+import com.example.expirydatetrackerapi.utils.RedisUtility;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,13 +45,17 @@ public class UserProductsExpiriesServiceTests {
     private UsersRepository usersRepository;
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private RedisUtility redisUtility;
     private UsersService userService;
+    private Gson gson;
     private UserProductExpiryService service;
 
     @BeforeEach
     void setUp(){
-        userService = new UsersServiceImpl(usersRepository);
-        service = new UserProductExpiryServiceImpl(repository, usersRepository, productRepository, userService);
+        gson = new Gson();
+        userService = new UsersServiceImpl(usersRepository, gson, redisUtility);
+        service = new UserProductExpiryServiceImpl(repository, usersRepository, productRepository, userService, redisUtility);
     }
 
     @Test

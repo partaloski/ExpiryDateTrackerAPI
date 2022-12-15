@@ -9,6 +9,9 @@ import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import com.example.expirydatetrackerapi.repository.UsersRepository;
 import com.example.expirydatetrackerapi.service.UsersService;
+import com.example.expirydatetrackerapi.utils.RedisUtility;
+import com.google.gson.Gson;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +20,13 @@ import java.util.*;
 import static java.util.Objects.isNull;
 
 @Service
+@AllArgsConstructor
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
-
-
-    public UsersServiceImpl(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    }
+    private final Gson gson;
+    private final RedisUtility redisUtility;
+    private final String REDIS_KEY_EXPIRIES = "EXPIRIES_";
+    private final String REDIS_KEY_WISHLIST = "WISHLIST_";
 
     @Override
     public User login(String username, String password) {
@@ -56,13 +59,29 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public List<UserProductsWishlistDTO> getWishlistForUser(String username, String auth_code) {
         User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
-        if(!this.authenticate(username, auth_code))
+
+        if(!this.authenticate(username, auth_code)){
             throw new UserFailedToAuthenticateException(username);
-        Collection<UserProductsWishlist> wishlist = user.getProductsWishlist();
+        }
+
+        String cacheKey = generateWishlistCacheKey(username);
+        String wishlistJSON = redisUtility.getValue(cacheKey);
+        Collection<UserProductsWishlist> wishlist;
+
+        if(isNull(wishlistJSON)){
+            wishlist = user.getProductsWishlist();
+            redisUtility.setValue(cacheKey, wishlist);
+        }
+        else{
+            wishlist = gson.fromJson(wishlistJSON, Collection.class);
+        }
+
         List<UserProductsWishlistDTO> wishlistDTOS = new ArrayList<>();
+
         for(UserProductsWishlist wl: wishlist){
             wishlistDTOS.add(UserProductsWishlistDTO.createWishlistOf(wl));
         }
+
         return wishlistDTOS;
     }
 
@@ -70,14 +89,32 @@ public class UsersServiceImpl implements UsersService {
     public List<UserProductsExpiryDTO> getExpiryListForUser(String username, String auth_code) {
         User user = usersRepository.findById(username)
                 .orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
-        if(!this.authenticate(username, auth_code))
+
+        if(!this.authenticate(username, auth_code)){
             throw new UserFailedToAuthenticateException(username);
-        Collection<UserProductsExpiry> expiries = user.getProductsExpiries();
+        }
+
+        String cacheKey = generateExpiryCacheKey(username);
+        String expiriesJSON = redisUtility.getValue(cacheKey);
+
+        Collection<UserProductsExpiry> expiries;
+
+        if(isNull(expiriesJSON)){
+            expiries = user.getProductsExpiries();
+            redisUtility.setValue(cacheKey, expiries);
+        }
+        else{
+            expiries = gson.fromJson(expiriesJSON, Collection.class);
+        }
+
         List<UserProductsExpiryDTO> expiryDTOS = new ArrayList<>();
+
         for(UserProductsExpiry e: expiries){
             expiryDTOS.add(UserProductsExpiryDTO.createExpiryOf(e));
         }
+
         expiryDTOS.sort(UserProductsExpiryDTO.comparator);
+
         return expiryDTOS;
     }
 
@@ -88,5 +125,13 @@ public class UsersServiceImpl implements UsersService {
         if(!user.getAuth_code().contentEquals(auth_code))
             return false;
         return true;
+    }
+
+    private String generateExpiryCacheKey(String username){
+        return String.format("%s%s", REDIS_KEY_EXPIRIES, username);
+    }
+
+    private String generateWishlistCacheKey(String username){
+        return String.format("%s%s", REDIS_KEY_WISHLIST, username);
     }
 }

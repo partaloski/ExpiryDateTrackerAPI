@@ -5,6 +5,8 @@ import com.example.expirydatetrackerapi.models.exceptions.ManufacturerDoesNotExi
 import com.example.expirydatetrackerapi.models.exceptions.NotValidException;
 import com.example.expirydatetrackerapi.repository.ManufacturerRepository;
 import com.example.expirydatetrackerapi.service.impl.ManufacturerServiceImpl;
+import com.example.expirydatetrackerapi.utils.RedisUtility;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +30,14 @@ public class ManufacturerServiceTests {
     @Mock
     private ManufacturerRepository repository;
     private ManufacturerService service;
+    private Gson gson;
+    @Mock
+    private RedisUtility redisUtility;
 
     @BeforeEach
     public void setUp(){
-        service = new ManufacturerServiceImpl(repository);
+        gson = new Gson();
+        service = new ManufacturerServiceImpl(repository, redisUtility, gson);
     }
 
     @Test

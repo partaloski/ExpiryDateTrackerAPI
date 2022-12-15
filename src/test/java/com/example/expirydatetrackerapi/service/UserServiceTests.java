@@ -8,6 +8,8 @@ import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import com.example.expirydatetrackerapi.repository.UsersRepository;
 import com.example.expirydatetrackerapi.service.impl.UsersServiceImpl;
+import com.example.expirydatetrackerapi.utils.RedisUtility;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,10 +36,12 @@ public class UserServiceTests {
     private UsersService service;
     @Mock
     private UsersRepository repository;
-
+    @Mock
+    private RedisUtility redisUtility;
+    private Gson gson;
     @BeforeEach
     void setUp(){
-        service = new UsersServiceImpl(repository);
+        service = new UsersServiceImpl(repository, gson, redisUtility);
     }
 
     @Test

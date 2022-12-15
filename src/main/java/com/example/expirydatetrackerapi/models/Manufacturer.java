@@ -3,11 +3,12 @@ package com.example.expirydatetrackerapi.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "manufacturers")
 @Data
-public class Manufacturer {
+public class Manufacturer implements Serializable {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

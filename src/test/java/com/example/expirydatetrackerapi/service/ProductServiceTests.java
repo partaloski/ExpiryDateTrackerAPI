@@ -9,6 +9,8 @@ import com.example.expirydatetrackerapi.models.exceptions.ProductWithIdAlreadyEx
 import com.example.expirydatetrackerapi.repository.ManufacturerRepository;
 import com.example.expirydatetrackerapi.repository.ProductRepository;
 import com.example.expirydatetrackerapi.service.impl.ProductServiceImpl;
+import com.example.expirydatetrackerapi.utils.RedisUtility;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,10 +34,13 @@ public class ProductServiceTests {
     private ProductRepository repository;
     @Mock
     private ManufacturerRepository manufacturerRepository;
-
+    @Mock
+    private RedisUtility redisUtility;
+    private Gson gson;
     @BeforeEach
     void setUp(){
-        service = new ProductServiceImpl(repository, manufacturerRepository);
+        gson = new Gson();
+        service = new ProductServiceImpl(repository, manufacturerRepository, redisUtility, gson);
     }
 
     @Test

@@ -13,6 +13,8 @@ import com.example.expirydatetrackerapi.repository.UserProductWishlistRepository
 import com.example.expirydatetrackerapi.repository.UsersRepository;
 import com.example.expirydatetrackerapi.service.impl.UserProductWishlistServiceImpl;
 import com.example.expirydatetrackerapi.service.impl.UsersServiceImpl;
+import com.example.expirydatetrackerapi.utils.RedisUtility;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.lang.reflect.GenericSignatureFormatError;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,13 +41,17 @@ public class UserProductsWishlistServiceTests {
     private UsersRepository usersRepository;
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private RedisUtility redisUtility;
     private UsersService userService;
+    private Gson gson;
     private UserProductWishlistService service;
 
     @BeforeEach
     void setUp(){
-        userService = new UsersServiceImpl(usersRepository);
-        service = new UserProductWishlistServiceImpl(repository, usersRepository, productRepository, userService);
+        gson = new Gson();
+        userService = new UsersServiceImpl(usersRepository, gson, redisUtility);
+        service = new UserProductWishlistServiceImpl(repository, usersRepository, productRepository, userService, redisUtility);
     }
 
     @Test
