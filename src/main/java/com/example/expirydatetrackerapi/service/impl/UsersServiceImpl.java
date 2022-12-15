@@ -1,5 +1,6 @@
 package com.example.expirydatetrackerapi.service.impl;
 
+import com.example.expirydatetrackerapi.helpers.ValidationMethods;
 import com.example.expirydatetrackerapi.models.User;
 import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
 import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
@@ -13,26 +14,36 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
-    private final PasswordEncoder passwordEncoder;
 
 
-    public UsersServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
+    public UsersServiceImpl(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User login(String username, String password) {
-        return usersRepository.findUserByUsernameAndPassword(username, password).orElseThrow(() -> new UserLoginFailedException());
+        if(isNull(username) || username.isEmpty()){
+            throw new NotValidException("Username field cannot be empty.");
+        }
+
+        if(isNull(password) || password.isEmpty()){
+            throw new NotValidException("Password field cannot be empty.");
+        }
+
+        return usersRepository.findUserByUsernameAndPassword(username, password).orElseThrow(UserLoginFailedException::new);
     }
 
     @Override
     public User register(String username, String password, String confirmPassword, String name, String surname, String email) {
         if(usersRepository.findById(username).isPresent())
-            throw new UserWithUsernameAlreadyExistsException(email);
+            throw new UserWithUsernameAlreadyExistsException(username);
+        if(ValidationMethods.isEmailInvalid(email))
+            throw new NotValidException("E-Mail is not valid.");
         if(password.equals(confirmPassword)){
             User user = new User(username, name, surname, email, password);
             return usersRepository.save(user);
@@ -47,39 +58,33 @@ public class UsersServiceImpl implements UsersService {
         User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
         if(!this.authenticate(username, auth_code))
             throw new UserFailedToAuthenticateException(username);
-        if(user.getProductsWishlist().size() == 0)
-            return new ArrayList<>();
-        else{
-            Collection<UserProductsWishlist> wishlist = user.getProductsWishlist();
-            List<UserProductsWishlistDTO> wishlistDTOS = new ArrayList<>();
-            for(UserProductsWishlist wl: wishlist){
-                wishlistDTOS.add(UserProductsWishlistDTO.createWishlistOf(wl));
-            }
-            return wishlistDTOS;
+        Collection<UserProductsWishlist> wishlist = user.getProductsWishlist();
+        List<UserProductsWishlistDTO> wishlistDTOS = new ArrayList<>();
+        for(UserProductsWishlist wl: wishlist){
+            wishlistDTOS.add(UserProductsWishlistDTO.createWishlistOf(wl));
         }
+        return wishlistDTOS;
     }
 
     @Override
     public List<UserProductsExpiryDTO> getExpiryListForUser(String username, String auth_code) {
-        User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
+        User user = usersRepository.findById(username)
+                .orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
         if(!this.authenticate(username, auth_code))
             throw new UserFailedToAuthenticateException(username);
-        if(user.getProductsExpiries().size() == 0)
-            return new ArrayList<>();
-        else{
-            Collection<UserProductsExpiry> expiries = user.getProductsExpiries();
-            List<UserProductsExpiryDTO> expiryDTOS = new ArrayList<>();
-            for(UserProductsExpiry e: expiries){
-                expiryDTOS.add(UserProductsExpiryDTO.createExpiryOf(e));
-            }
-            expiryDTOS.sort(UserProductsExpiryDTO.comparator);
-            return expiryDTOS;
+        Collection<UserProductsExpiry> expiries = user.getProductsExpiries();
+        List<UserProductsExpiryDTO> expiryDTOS = new ArrayList<>();
+        for(UserProductsExpiry e: expiries){
+            expiryDTOS.add(UserProductsExpiryDTO.createExpiryOf(e));
         }
+        expiryDTOS.sort(UserProductsExpiryDTO.comparator);
+        return expiryDTOS;
     }
 
     @Override
     public boolean authenticate(String username, String auth_code) {
-        User user = usersRepository.findById(username).orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
+        User user = usersRepository.findById(username)
+                .orElseThrow(() -> new UserWithUsernameDoesNotExistException(username));
         if(!user.getAuth_code().contentEquals(auth_code))
             return false;
         return true;

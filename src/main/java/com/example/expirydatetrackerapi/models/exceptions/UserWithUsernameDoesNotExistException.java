@@ -1,7 +1,10 @@
 package com.example.expirydatetrackerapi.models.exceptions;
 
-public class UserWithUsernameDoesNotExistException extends RuntimeException{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+public class UserWithUsernameDoesNotExistException extends ResponseStatusException {
     public UserWithUsernameDoesNotExistException(String username) {
-        super("The user with username \"" + username + "\" cannot be found.");
+        super(HttpStatus.BAD_REQUEST, "The user with username \"" + username + "\" cannot be found.");
     }
 }

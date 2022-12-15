@@ -1,4 +1,4 @@
-package com.example.expirydatetrackerapi.web.controller;
+package com.example.expirydatetrackerapi.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

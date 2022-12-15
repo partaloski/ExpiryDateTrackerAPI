@@ -1,7 +1,10 @@
 package com.example.expirydatetrackerapi.models.exceptions;
 
-public class UserFailedToAuthenticateException extends RuntimeException{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+public class UserFailedToAuthenticateException extends ResponseStatusException {
     public UserFailedToAuthenticateException(String username) {
-        super("The user with the username \""+username+"\" failed to authenticate.");
+        super(HttpStatus.FORBIDDEN,"The user with the username \""+username+"\" failed to authenticate.");
     }
 }

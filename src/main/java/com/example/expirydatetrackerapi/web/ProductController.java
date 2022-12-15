@@ -1,4 +1,4 @@
-package com.example.expirydatetrackerapi.web.controller.rest;
+package com.example.expirydatetrackerapi.web;
 
 import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.dto.ProductsDTO;
@@ -6,15 +6,13 @@ import com.example.expirydatetrackerapi.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/products")
-public class ProductRestController {
+public class ProductController {
 
     private final ProductService productService;
 
-    public ProductRestController(ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -25,11 +23,7 @@ public class ProductRestController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable String id){
-        Product p = productService.getProduct(id);
-        if (p != null){
-            return ResponseEntity.ok().body(p);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(productService.getProduct(id));
     }
 
     @PostMapping("/add")

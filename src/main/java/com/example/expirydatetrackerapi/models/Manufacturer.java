@@ -16,6 +16,11 @@ public class Manufacturer {
     @Column(name="name")
     private String name;
 
+    public Manufacturer(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Manufacturer(String name) {
         this.name = name;
     }

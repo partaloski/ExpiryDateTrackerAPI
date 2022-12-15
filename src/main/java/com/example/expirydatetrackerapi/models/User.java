@@ -5,13 +5,16 @@ import com.example.expirydatetrackerapi.models.dto.UserDTO;
 import com.example.expirydatetrackerapi.models.relations.UserProductsExpiry;
 import com.example.expirydatetrackerapi.models.relations.UserProductsWishlist;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name="users")
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     @Column(name = "username")
@@ -38,6 +41,17 @@ public class User {
     @OneToMany(mappedBy="user")
     private Collection<UserProductsWishlist> productsWishlist;
 
+    public User(String username, String password, String auth_code) {
+        this.username = username;
+        this.password = password;
+        this.auth_code = auth_code;
+        this.name = "";
+        this.surname = "";
+        this.email = "";
+        this.productsExpiries = Collections.EMPTY_LIST;
+        this.productsWishlist = Collections.EMPTY_LIST;
+    }
+
     public User(String username, String name, String surname, String email, String password) {
         this.username = username;
         this.name = name;
@@ -47,15 +61,12 @@ public class User {
         this.auth_code = AuthCodeGenerator.generate();
     }
 
-    public UserDTO generateDTO(){
-        return new UserDTO(this.username, this.name, this.surname, this.email);
-    }
-
-    public User() {
-    }
-
-    public void clearQuery(){
-        this.productsExpiries = null;
-        this.productsWishlist = null;
+    public User(String username, String name, String surname, String email, String password, String auth_code) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.auth_code = auth_code;
     }
 }
