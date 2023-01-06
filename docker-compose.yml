@@ -45,8 +45,10 @@ services:
             - edt-vol-cache:/data
     edt-prometheus:
         image: prom/prometheus
+        depends_on:
+            - edt-api
         ports:
-        - 9092:9090
+            - 9092:9090
         command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
 volumes:
   edt-vol-psql:
