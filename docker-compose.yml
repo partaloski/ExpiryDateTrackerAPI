@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+    edt-api:
+        container_name: edt-api        
+        depends_on:
+          - edt-db
+          - edt-cache
+        build:
+            context: docker-edt-api
+            dockerfile: Dockerfile
+        image: edt-api:latest
+        ports: 
+            - 9091:8080
+        environment:
+            - SPRING_DATASOURCE_USERNAME=edt_admin
+            - SPRING_DATASOURCE_PASSWORD=edtadmin123
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://edt-db:5432/postgres
+            - SPRING_REDIS_HOST=edt-cache
+            - SPRING_REDIS_PORT=6379
+        links:
+            - edt-cache
+        networks:
+            - edt-network
+    edt-db:
+        image: 'postgres:13.2-alpine'
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=edt_admin
+            - POSTGRES_PASSWORD=edtadmin123
+        volumes:
+            - edt-vol-psql:/var/lib/postgresql/data:delegated
+        networks:
+            - edt-network
+    edt-cache:
+        image: 'redis:6.2-alpine'
+        restart: always
+        command: redis-server --save 20 1 --loglevel warning
+        networks:
+            - edt-network
+        ports:
+            - '6379:6379'
+        volumes: 
+            - edt-vol-cache:/data
+    edt-prometheus:
+        image: prom/prometheus
+        ports:
+        - 9092:9090
+        command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+volumes:
+  edt-vol-psql:
+  edt-vol-cache:
+    driver: local
+    
+networks:
+    edt-network:
+        driver: bridge
+
+
+
+
