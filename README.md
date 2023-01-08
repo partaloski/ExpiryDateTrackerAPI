@@ -1,4 +1,4 @@
-#Expiry Date Tracker App's API for data storing and inputting.</h1>
+# Expiry Date Tracker App's API for data storing and inputting.</h1>
 ---
 [![Check Out, Build and Push Image to DockerHub](https://github.com/partaloski/ExpiryDateTrackerAPI/actions/workflows/update-docker-image.yml/badge.svg?event=push)](https://github.com/partaloski/ExpiryDateTrackerAPI/actions/workflows/update-docker-image.yml)
 ---
@@ -11,7 +11,7 @@ Made by: Petar Partaloski - 193181 for the aim of completing a project for the s
 
 ---
 
-##Running with Docker Compose
+## Running with Docker Compose
 
 To run the application using the Docker-Compose application, you'll need to have installed:
 1. Docker
@@ -25,7 +25,7 @@ The application should then be up and running on `localhost:9091`
 
 ---
 
-##Running with Helm Chart
+## Running with Helm Chart
 
 To run the application using Helm, you'll need to first install:
 1. Docker
