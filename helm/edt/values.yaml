@@ -63,15 +63,15 @@ service:
   port: 8080
 
 servicedb:
-  type: NodePort
+  type: ClusterIP
   port: 5432
 
 servicecache:
-  type: NodePort
+  type: ClusterIP
   port: 6379
 
 serviceprom:
-  type: NodePort
+  type: ClusterIP
   port: 9092
 
 ingress:

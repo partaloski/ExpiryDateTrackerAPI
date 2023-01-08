@@ -1,5 +1,6 @@
 package com.example.expirydatetrackerapi.service.impl;
 
+import com.example.expirydatetrackerapi.common.LoggerStringsContainer;
 import com.example.expirydatetrackerapi.models.Product;
 import com.example.expirydatetrackerapi.models.User;
 import com.example.expirydatetrackerapi.models.dto.UserProductsWishlistDTO;
@@ -16,9 +17,13 @@ import com.example.expirydatetrackerapi.service.UserProductWishlistService;
 import com.example.expirydatetrackerapi.service.UsersService;
 import com.example.expirydatetrackerapi.utils.RedisUtility;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.expirydatetrackerapi.common.LoggerStringsContainer.CACHE_INVALIDATION_FAILED_MESSAGE;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +34,7 @@ public class UserProductWishlistServiceImpl implements UserProductWishlistServic
     private final UsersService userService;
     private final RedisUtility redisUtility;
     private final String REDIS_KEY = "WISHLIST_";
+    private final Logger logger = LoggerFactory.getLogger(UserProductWishlistServiceImpl.class);
 
     @Override
     public UserProductsWishlistDTO addToWishlist(String username, String productId, Integer quantity, String auth_code) {
@@ -91,6 +97,11 @@ public class UserProductWishlistServiceImpl implements UserProductWishlistServic
     }
 
     private void invalidateCache(String username){
-        redisUtility.clearValue(generateCacheKey(username));
+        try{
+            redisUtility.clearValue(generateCacheKey(username));
+        }
+        catch (Exception e){
+            logger.error(CACHE_INVALIDATION_FAILED_MESSAGE);
+        }
     }
 }

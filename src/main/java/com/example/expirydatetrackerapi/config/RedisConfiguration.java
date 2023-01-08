@@ -25,7 +25,7 @@ public class RedisConfiguration {
 
     @Value("${spring.redis.password}")
     private String redisPassword;
-    
+
     @Bean
     public RedisTemplate<String, String> redisTemplate(){
         final RedisTemplate<String, String>  redisTemplate = new RedisTemplate<String, String>();

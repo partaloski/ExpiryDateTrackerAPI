@@ -16,10 +16,14 @@ import com.example.expirydatetrackerapi.service.UsersService;
 import com.example.expirydatetrackerapi.utils.RedisUtility;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.example.expirydatetrackerapi.common.LoggerStringsContainer.CACHE_INVALIDATION_FAILED_MESSAGE;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +34,7 @@ public class UserProductExpiryServiceImpl implements UserProductExpiryService {
     private final UsersService userService;
     private final RedisUtility redisUtility;
     private final String REDIS_KEY = "EXPIRIES_";
+    private final Logger logger = LoggerFactory.getLogger(UserProductExpiryServiceImpl.class);
 
     @Override
     public UserProductsExpiryDTO addExpiry(String username, String productId, LocalDate expiryDate, String auth_code) {
@@ -84,6 +89,11 @@ public class UserProductExpiryServiceImpl implements UserProductExpiryService {
     }
 
     private void invalidateCache(String username){
-        redisUtility.clearValue(generateCacheKey(username));
+        try{
+            redisUtility.clearValue(generateCacheKey(username));
+        }
+        catch (Exception e){
+            logger.error(CACHE_INVALIDATION_FAILED_MESSAGE);
+        }
     }
 }

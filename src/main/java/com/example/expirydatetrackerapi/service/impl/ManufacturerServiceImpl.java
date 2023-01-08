@@ -8,6 +8,8 @@ import com.example.expirydatetrackerapi.service.ManufacturerService;
 import com.example.expirydatetrackerapi.utils.RedisUtility;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.jedis.JedisUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.expirydatetrackerapi.common.LoggerStringsContainer.*;
 import static java.util.Objects.isNull;
 
 @Service
@@ -25,16 +28,32 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     private final ManufacturerRepository repository;
     private final RedisUtility redisUtility;
     private final Gson gson;
+    private final Logger logger = LoggerFactory.getLogger(ManufacturerServiceImpl.class);
 
 
     @Override
     public List<Manufacturer> findAll() {
-        String cacheResult = redisUtility.getValue(REDIS_KEY);
+        String cacheResult = null;
+
+        try{
+            cacheResult = redisUtility.getValue(REDIS_KEY);
+        }
+        catch (Exception e){
+            logger.error(CACHE_LOOKUP_FAILED_MESSAGE);
+        }
+
         List<Manufacturer> manufacturers;
 
         if(isNull(cacheResult)){
             manufacturers = repository.findAll();
-            redisUtility.setValue(REDIS_KEY, manufacturers);
+
+            try{
+                redisUtility.setValue(REDIS_KEY, manufacturers);
+            }
+            catch (Exception e){
+                logger.error(CACHE_UPDATE_FAILED_MESSAGE);
+            }
+
             return manufacturers;
         }
 
@@ -69,6 +88,11 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     }
 
     private void invalidateCache(){
-        redisUtility.clearValue(REDIS_KEY);
+        try{
+            redisUtility.clearValue(REDIS_KEY);
+        }
+        catch (Exception e){
+            logger.error(CACHE_INVALIDATION_FAILED_MESSAGE);
+        }
     }
 }

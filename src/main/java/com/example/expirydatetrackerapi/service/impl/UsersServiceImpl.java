@@ -1,5 +1,6 @@
 package com.example.expirydatetrackerapi.service.impl;
 
+import com.example.expirydatetrackerapi.common.LoggerStringsContainer;
 import com.example.expirydatetrackerapi.helpers.ValidationMethods;
 import com.example.expirydatetrackerapi.models.User;
 import com.example.expirydatetrackerapi.models.dto.UserProductsExpiryDTO;
@@ -12,11 +13,15 @@ import com.example.expirydatetrackerapi.service.UsersService;
 import com.example.expirydatetrackerapi.utils.RedisUtility;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.example.expirydatetrackerapi.common.LoggerStringsContainer.CACHE_LOOKUP_FAILED_MESSAGE;
+import static com.example.expirydatetrackerapi.common.LoggerStringsContainer.CACHE_UPDATE_FAILED_MESSAGE;
 import static java.util.Objects.isNull;
 
 @Service
@@ -27,6 +32,7 @@ public class UsersServiceImpl implements UsersService {
     private final RedisUtility redisUtility;
     private final String REDIS_KEY_EXPIRIES = "EXPIRIES_";
     private final String REDIS_KEY_WISHLIST = "WISHLIST_";
+    private final Logger logger = LoggerFactory.getLogger(UsersServiceImpl.class);
 
     @Override
     public User login(String username, String password) {
@@ -65,12 +71,26 @@ public class UsersServiceImpl implements UsersService {
         }
 
         String cacheKey = generateWishlistCacheKey(username);
-        String wishlistJSON = redisUtility.getValue(cacheKey);
+        String wishlistJSON = null;
+
+        try{
+            wishlistJSON = redisUtility.getValue(cacheKey);
+        }
+        catch (Exception e){
+            logger.error(CACHE_LOOKUP_FAILED_MESSAGE);
+        }
+
         Collection<UserProductsWishlist> wishlist;
 
         if(isNull(wishlistJSON)){
             wishlist = user.getProductsWishlist();
-            redisUtility.setValue(cacheKey, wishlist);
+
+            try{
+                redisUtility.setValue(cacheKey, wishlist);
+            }
+            catch (Exception e){
+                logger.error(CACHE_UPDATE_FAILED_MESSAGE);
+            }
         }
         else{
             wishlist = gson.fromJson(wishlistJSON, Collection.class);
@@ -95,13 +115,26 @@ public class UsersServiceImpl implements UsersService {
         }
 
         String cacheKey = generateExpiryCacheKey(username);
-        String expiriesJSON = redisUtility.getValue(cacheKey);
+        String expiriesJSON = null;
+
+        try{
+            expiriesJSON = redisUtility.getValue(cacheKey);
+        }
+        catch (Exception e){
+            logger.error(CACHE_LOOKUP_FAILED_MESSAGE);
+        }
+
 
         Collection<UserProductsExpiry> expiries;
 
         if(isNull(expiriesJSON)){
             expiries = user.getProductsExpiries();
-            redisUtility.setValue(cacheKey, expiries);
+            try{
+                redisUtility.setValue(cacheKey, expiries);
+            }
+            catch (Exception e){
+                logger.error(CACHE_UPDATE_FAILED_MESSAGE);
+            }
         }
         else{
             expiries = gson.fromJson(expiriesJSON, Collection.class);

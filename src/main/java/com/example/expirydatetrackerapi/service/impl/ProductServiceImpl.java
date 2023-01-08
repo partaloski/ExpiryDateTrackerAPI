@@ -12,11 +12,14 @@ import com.example.expirydatetrackerapi.service.ProductService;
 import com.example.expirydatetrackerapi.utils.RedisUtility;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.expirydatetrackerapi.common.LoggerStringsContainer.*;
 import static java.util.Objects.isNull;
 
 @Service
@@ -28,16 +31,31 @@ public class ProductServiceImpl implements ProductService {
     private final RedisUtility redisUtility;
     private final Gson gson;
     private final String REDIS_KEY = "products";
+    private final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Override
     public List<Product> findAll() {
-        String productsJSON = redisUtility.getValue(REDIS_KEY);
+        String productsJSON = null;
+
+        try{
+            productsJSON = redisUtility.getValue(REDIS_KEY);
+        }
+        catch (Exception e){
+            logger.error(CACHE_LOOKUP_FAILED_MESSAGE);
+        }
 
         List<Product> products;
 
         if(isNull(productsJSON)){
             products = productRepository.findAll();
-            redisUtility.setValue(REDIS_KEY, products);
+
+            try{
+                redisUtility.setValue(REDIS_KEY, products);
+            }
+            catch (Exception e){
+                logger.error(CACHE_UPDATE_FAILED_MESSAGE);
+            }
+
         }
         else{
             products = gson.fromJson(productsJSON, List.class);
@@ -56,7 +74,10 @@ public class ProductServiceImpl implements ProductService {
             throw new NotValidException("Product's Name cannot be empty.");
         }
 
-        Manufacturer manufacturer = manufacturerRepository.findById(manufacturer_id).orElseThrow(() -> new ManufacturerDoesNotExistException(manufacturer_id));
+        Manufacturer manufacturer = manufacturerRepository
+                .findById(manufacturer_id)
+                .orElseThrow(() -> new ManufacturerDoesNotExistException(manufacturer_id));
+
         Product product = new Product(id, name, manufacturer);
 
         if(productRepository.findById(id).isPresent()){
@@ -92,6 +113,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void invalidateCache(){
-        redisUtility.clearValue(REDIS_KEY);
+        try{
+            redisUtility.clearValue(REDIS_KEY);
+        }
+        catch (Exception e){
+            logger.error(CACHE_INVALIDATION_FAILED_MESSAGE);
+        }
     }
 }
