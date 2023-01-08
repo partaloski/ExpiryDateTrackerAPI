@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "edt.fullname" . }}
+  labels:
+    {{- include "edt.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "edt.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "edt.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "edt.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:          
+            - name: "SPRING_DATASOURCE_USERNAME"
+              valueFrom:
+                secretKeyRef:
+                  key:  datasource_user
+                  name: {{ .Release.Name }}-auth
+            - name: "SPRING_DATASOURCE_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key:  datasource_pass
+                  name: {{ .Release.Name }}-auth
+            - name: "SPRING_DATASOURCE_URL"
+              valueFrom:
+                secretKeyRef:
+                  key:  datasource_url
+                  name: {{ .Release.Name }}-auth
+            - name: "SPRING_REDIS_HOST"
+              valueFrom:
+                secretKeyRef:
+                  key:  redis_host
+                  name: {{ .Release.Name }}-auth
+            - name: "SPRING_REDIS_PORT"
+              valueFrom:
+                secretKeyRef:
+                  key:  redis_port
+                  name: {{ .Release.Name }}-auth
+            - name: "SPRING_REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key:  redis_password
+                  name: {{ .Release.Name }}-auth
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: {{ .Values.dbimage.containerName }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.dbimage.repository }}:{{ .Values.dbimage.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.dbimage.pullPolicy }}
+          env:          
+            - name: "POSTGRES_USER"
+              valueFrom:
+                secretKeyRef:
+                  key:  datasource_user
+                  name: {{ .Release.Name }}-auth
+            - name: "POSTGRES_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key:  datasource_pass
+                  name: {{ .Release.Name }}-auth
+          ports:
+            - name: http
+              containerPort: {{ .Values.servicedb.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: {{ .Values.cacheimage.containerName }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.cacheimage.repository }}:{{ .Values.cacheimage.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.cacheimage.pullPolicy }}
+          env:
+            - name: "ALLOW_EMPTY_PASSWORD"
+              value: "yes"
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key:  redis_password
+                  name: {{ .Release.Name }}-auth
+          ports:
+            - name: http
+              containerPort: {{ .Values.servicecache.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: {{ .Values.promimage.containerName }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.promimage.repository }}:{{ .Values.promimage.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.promimage.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.serviceprom.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
