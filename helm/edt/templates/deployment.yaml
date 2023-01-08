@@ -27,6 +27,11 @@ spec:
       serviceAccountName: {{ include "edt.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: volumes-edt-redis
+        emptyDir: {}
+      - name: volumes-edt-psql
+        emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -75,6 +80,9 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.dbimage.repository }}:{{ .Values.dbimage.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.dbimage.pullPolicy }}
+          volumeMounts:
+          - name: volumes-edt-psql
+            mountPath: /var/lib/postgresql/data:delegated
           env:          
             - name: "POSTGRES_USER"
               valueFrom:
@@ -97,10 +105,18 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.cacheimage.repository }}:{{ .Values.cacheimage.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.cacheimage.pullPolicy }}
+          volumeMounts:
+          - name: volumes-edt-redis
+            mountPath: /data/redis
           env:
             - name: "ALLOW_EMPTY_PASSWORD"
               value: "yes"
             - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key:  redis_password
+                  name: {{ .Release.Name }}-auth
+            - name: "REDIS_MASTER_PASSWORD"
               valueFrom:
                 secretKeyRef:
                   key:  redis_password
